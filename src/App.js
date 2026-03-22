@@ -11,6 +11,7 @@ import M07 from './modules/M07_Unified_Securite';
 import M08 from './modules/M08_Unified_Build';
 import M09 from './modules/M09_Unified_Debugging';
 import M10 from './modules/M10_Unified_Standards';
+import M11 from './modules/M11_Unified_EscapeRoom';
 
 // Import standalone visual games
 import GameBubbleSort from './modules/Game_BubbleSort';
@@ -36,7 +37,7 @@ const MODULES = [
   { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true },
   { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true },
   { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true },
-  { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: null, ready: false },
+  { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true },
   { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: null, ready: false },
   { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: null, ready: false },
 ];
