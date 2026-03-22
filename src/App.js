@@ -8,6 +8,11 @@ import M04 from './modules/M04_Unified_Data';
 import M05 from './modules/M05_Unified_Heritage';
 import M06 from './modules/M06_Unified_Projet';
 
+// Import standalone visual games
+import GameBubbleSort from './modules/Game_BubbleSort';
+import GameSnakeLoops from './modules/Game_SnakeLoops';
+import GameOOPFactory from './modules/Game_OOPFactory';
+
 const C = {
   bg: "#0a0f1a", card: "#111827", primary: "#0D7377", secondary: "#14A3C7",
   accent: "#32E0C4", gold: "#F59E0B", text: "#e2e8f0", muted: "#94a3b8",
@@ -34,6 +39,12 @@ const PHASES = [
   { id: 1, title: "Phase 1 — Rattrapage", subtitle: "Les fondamentaux Java", color: C.accent },
   { id: 2, title: "Phase 2 — LO3 Implémentation", subtitle: "Construire un vrai projet", color: "#7C3AED" },
   { id: 3, title: "Phase 3 — LO4 Debugging", subtitle: "Qualité et standards", color: C.danger },
+];
+
+const GAMES = [
+  { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres en les échangeant — visualisez l'algorithme", icon: "🫧", component: GameBubbleSort, module: "M02" },
+  { id: "g-snake", title: "Le Serpent des Boucles", desc: "Réglez les paramètres de la boucle, prédisez la longueur du serpent", icon: "🐍", component: GameSnakeLoops, module: "M02" },
+  { id: "g-factory", title: "L'Usine à Objets", desc: "Assemblez une classe Java pièce par pièce dans l'usine", icon: "🏭", component: GameOOPFactory, module: "M03" },
 ];
 
 // Simple localStorage wrapper (replaces window.storage for web deployment)
@@ -140,6 +151,34 @@ function Portal({ onSelectModule }) {
           </div>
         ))}
 
+        {/* ARCADE */}
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <div style={{ width: 4, height: 24, borderRadius: 2, background: C.gold }} />
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: C.gold }}>Arcade — Mini-Jeux</div>
+              <div style={{ fontSize: 11, color: C.muted }}>Apprendre en jouant — accessible à tout moment</div>
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8, paddingLeft: 14 }}>
+            {GAMES.map(game => (
+              <div key={game.id}
+                onClick={() => onSelectModule(game.id)}
+                style={{
+                  padding: "14px", borderRadius: 10, background: C.card,
+                  border: `1px solid ${C.gold}30`, cursor: "pointer",
+                  transition: "all .2s",
+                }}
+              >
+                <div style={{ fontSize: 24, marginBottom: 6 }}>{game.icon}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{game.title}</div>
+                <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{game.desc}</div>
+                <div style={{ marginTop: 8, fontSize: 10, color: C.gold, fontWeight: 600 }}>Lié au {game.module}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div style={{ textAlign: "center", padding: "20px 0", borderTop: `1px solid ${C.border}`, marginTop: 16 }}>
           <div style={{ fontSize: 11, color: C.dimmed }}>CodeQuest — Le Labo de l'Inventeur · BTEC HND Unit 1</div>
         </div>
@@ -152,9 +191,11 @@ export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
 
   const mod = MODULES.find(m => m.id === currentModule);
-  const ModComponent = mod?.component;
+  const game = GAMES.find(g => g.id === currentModule);
+  const ActiveComponent = mod?.component || game?.component;
+  const activeTitle = mod?.title || game?.title;
 
-  if (ModComponent) {
+  if (ActiveComponent) {
     return (
       <div>
         <div style={{
@@ -171,9 +212,11 @@ export default function App() {
           >
             ← Retour au portail
           </button>
-          <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>{mod.title}</span>
+          <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>
+            {game ? `🎮 ${activeTitle}` : activeTitle}
+          </span>
         </div>
-        <ModComponent />
+        <ActiveComponent />
       </div>
     );
   }
