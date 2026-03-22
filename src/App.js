@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
+import M00 from './modules/M00_Unified_Fondamentaux';
 import M02 from './modules/M02_Unified_Boucles';
 import M03 from './modules/M03_Unified_OOP';
 import M04 from './modules/M04_Unified_Data';
@@ -29,6 +30,7 @@ const C = {
 };
 
 const MODULES = [
+  { id: "m00", title: "M00 — Fondamentaux", desc: "Pipeline, Stacks/Queues, Events, IDE", phase: 0, component: M00, ready: true },
   { id: "m01", title: "M01 — Conditions", desc: "if/else, switch, &&, ||", phase: 1, component: M01, ready: true },
   { id: "m02", title: "M02 — Boucles", desc: "for, while, break, continue", phase: 1, component: M02, ready: true },
   { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true },
@@ -45,6 +47,7 @@ const MODULES = [
 ];
 
 const PHASES = [
+  { id: 0, title: "Phase 0 — Essential Content", subtitle: "Gaps BTEC obligatoires", color: C.gold },
   { id: 1, title: "Phase 1 — Rattrapage", subtitle: "Les fondamentaux Java", color: C.accent },
   { id: 2, title: "Phase 2 — LO3 Implémentation", subtitle: "Construire un vrai projet", color: "#7C3AED" },
   { id: 3, title: "Phase 3 — LO4 Debugging", subtitle: "Qualité et standards", color: C.danger },
