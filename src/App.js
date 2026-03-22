@@ -12,6 +12,8 @@ import M08 from './modules/M08_Unified_Build';
 import M09 from './modules/M09_Unified_Debugging';
 import M10 from './modules/M10_Unified_Standards';
 import M11 from './modules/M11_Unified_EscapeRoom';
+import M12 from './modules/M12_Unified_Fichiers';
+import M13 from './modules/M13_Unified_BDD';
 
 // Import standalone visual games
 import GameBubbleSort from './modules/Game_BubbleSort';
@@ -38,8 +40,8 @@ const MODULES = [
   { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true },
   { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true },
   { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true },
-  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: null, ready: false },
-  { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: null, ready: false },
+  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: M12, ready: true },
+  { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: M13, ready: true },
 ];
 
 const PHASES = [
@@ -196,8 +198,61 @@ function Portal({ onSelectModule }) {
   );
 }
 
+function CohortSelector({ onSelect }) {
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ fontSize: 11, letterSpacing: 4, color: C.dimmed, marginBottom: 8 }}>BTEC HND UNIT 1 · PROGRAMMING</div>
+      <div style={{ fontSize: 32, fontWeight: 800, color: C.accent, marginBottom: 4 }}>CODEQUEST</div>
+      <div style={{ fontSize: 14, color: C.muted, marginBottom: 32 }}>Le Labo de l'Inventeur</div>
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", maxWidth: 700 }}>
+        <button onClick={() => onSelect("2025")} style={{
+          flex: 1, minWidth: 280, padding: "28px 24px", borderRadius: 16,
+          border: `2px solid ${C.primary}`, background: C.primary + "12",
+          cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "all .2s",
+        }}>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: C.accent, fontWeight: 600, marginBottom: 4 }}>COHORTE 2025-2026</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 8 }}>Rattrapage LO3-LO4</div>
+          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
+            Vous avez deja vu les bases en cours. Ce parcours couvre les concepts OOP, heritage, securite, debugging et standards pour completer LO3 et LO4.
+          </div>
+          <div style={{ marginTop: 12, fontSize: 11, color: C.accent }}>13 modules · M01 a M13</div>
+        </button>
+        <button onClick={() => onSelect("2026")} style={{
+          flex: 1, minWidth: 280, padding: "28px 24px", borderRadius: 16,
+          border: `2px solid ${C.gold}`, background: C.gold + "08",
+          cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "all .2s",
+        }}>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: C.gold, fontWeight: 600, marginBottom: 4 }}>COHORTE 2026-2027</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 8 }}>Parcours complet depuis zero</div>
+          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
+            Premiere annee HND. Le parcours commence par l'installation d'Eclipse, Hello World, les variables et les types avant d'avancer vers OOP et les projets.
+          </div>
+          <div style={{ marginTop: 12, fontSize: 11, color: C.gold }}>Parcours LO1 → LO4 complet · Bientot disponible</div>
+        </button>
+      </div>
+      <div style={{ marginTop: 24, fontSize: 10, color: C.dimmed }}>Le choix est sauvegarde. Vous pouvez changer a tout moment depuis le portail.</div>
+    </div>
+  );
+}
+
 export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
+  const [cohort, setCohort] = useState(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("cq-cohort");
+    if (saved) setCohort(saved);
+  }, []);
+
+  const selectCohort = (c) => {
+    setCohort(c);
+    localStorage.setItem("cq-cohort", c);
+  };
+
+  // Show cohort selector first
+  if (!cohort) {
+    return <CohortSelector onSelect={selectCohort} />;
+  }
 
   const mod = MODULES.find(m => m.id === currentModule);
   const game = GAMES.find(g => g.id === currentModule);
@@ -222,7 +277,7 @@ export default function App() {
             ← Retour au portail
           </button>
           <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>
-            {game ? `🎮 ${activeTitle}` : activeTitle}
+            {game ? `${activeTitle}` : activeTitle}
           </span>
         </div>
         <ActiveComponent />
@@ -230,5 +285,16 @@ export default function App() {
     );
   }
 
-  return <Portal onSelectModule={setCurrentModule} />;
+  return (
+    <div>
+      <Portal onSelectModule={setCurrentModule} />
+      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}` }}>
+        <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
+          padding: "4px 12px", borderRadius: 5, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dimmed, cursor: "pointer",
+          fontFamily: "'Segoe UI',sans-serif", fontSize: 10,
+        }}>Changer de cohorte ({cohort === "2025" ? "2025-2026" : "2026-2027"})</button>
+      </div>
+    </div>
+  );
 }
