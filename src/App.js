@@ -6,6 +6,7 @@ import M02 from './modules/M02_Unified_Boucles';
 import M03 from './modules/M03_Unified_OOP';
 import M04 from './modules/M04_Unified_Data';
 import M05 from './modules/M05_Unified_Heritage';
+import M06 from './modules/M06_Unified_Projet';
 
 const C = {
   bg: "#0a0f1a", card: "#111827", primary: "#0D7377", secondary: "#14A3C7",
@@ -19,7 +20,7 @@ const MODULES = [
   { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true },
   { id: "m04", title: "M04 — Data", desc: "String, ArrayList, CRUD", phase: 1, component: M04, ready: true },
   { id: "m05", title: "M05 — Héritage", desc: "extends, super, protected, polymorphisme", phase: 2, component: M05, ready: true },
-  { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: null, ready: false },
+  { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true },
   { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: null, ready: false },
   { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: null, ready: false },
   { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: null, ready: false },
