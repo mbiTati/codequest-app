@@ -9,6 +9,8 @@ import M05 from './modules/M05_Unified_Heritage';
 import M06 from './modules/M06_Unified_Projet';
 import M07 from './modules/M07_Unified_Securite';
 import M08 from './modules/M08_Unified_Build';
+import M09 from './modules/M09_Unified_Debugging';
+import M10 from './modules/M10_Unified_Standards';
 
 // Import standalone visual games
 import GameBubbleSort from './modules/Game_BubbleSort';
@@ -32,8 +34,8 @@ const MODULES = [
   { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true },
   { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true },
   { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true },
-  { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: null, ready: false },
-  { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: null, ready: false },
+  { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true },
+  { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true },
   { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: null, ready: false },
   { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: null, ready: false },
   { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: null, ready: false },
