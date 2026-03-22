@@ -23,6 +23,7 @@ import GameSnakeLoops from './modules/Game_SnakeLoops';
 import GameOOPFactory from './modules/Game_OOPFactory';
 import GameBottleFill from './modules/Game_BottleFill';
 import GameMaze from './modules/Game_MazeConditions';
+import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
   bg: "#0a0f1a", card: "#111827", primary: "#0D7377", secondary: "#14A3C7",
@@ -243,15 +244,24 @@ function CohortSelector({ onSelect }) {
 export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
   const [cohort, setCohort] = useState(null);
+  const [isTeacher, setIsTeacher] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("cq-cohort");
     if (saved) setCohort(saved);
+    const t = localStorage.getItem("cq-teacher");
+    if (t === "true") setIsTeacher(true);
   }, []);
 
   const selectCohort = (c) => {
     setCohort(c);
     localStorage.setItem("cq-cohort", c);
+  };
+
+  const toggleTeacher = () => {
+    const next = !isTeacher;
+    setIsTeacher(next);
+    localStorage.setItem("cq-teacher", String(next));
   };
 
   // Show cohort selector first
@@ -279,13 +289,14 @@ export default function App() {
               fontFamily: "inherit", fontSize: 12,
             }}
           >
-            ← Retour au portail
+            {"\u2190 Retour au portail"}
           </button>
           <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>
-            {game ? `${activeTitle}` : activeTitle}
+            {activeTitle}
           </span>
         </div>
         <ActiveComponent />
+        {mod && <ResourcesBar moduleId={mod.id} isTeacher={isTeacher} />}
       </div>
     );
   }
@@ -293,12 +304,22 @@ export default function App() {
   return (
     <div>
       <Portal onSelectModule={setCurrentModule} />
-      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}` }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px" }}>
+        <PortalResources isTeacher={isTeacher} />
+      </div>
+      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}`, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
           padding: "4px 12px", borderRadius: 5, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dimmed, cursor: "pointer",
           fontFamily: "'Segoe UI',sans-serif", fontSize: 10,
-        }}>Changer de cohorte ({cohort === "2025" ? "2025-2026" : "2026-2027"})</button>
+        }}>{"Changer de cohorte (" + (cohort === "2025" ? "2025-2026" : "2026-2027") + ")"}</button>
+        <button onClick={toggleTeacher} style={{
+          padding: "4px 12px", borderRadius: 5,
+          border: `1px solid ${isTeacher ? C.gold : C.border}`,
+          background: isTeacher ? C.gold + "15" : "transparent",
+          color: isTeacher ? C.gold : C.dimmed, cursor: "pointer",
+          fontFamily: "'Segoe UI',sans-serif", fontSize: 10, fontWeight: isTeacher ? 600 : 400,
+        }}>{isTeacher ? "\uD83D\uDD13 Mode Enseignant" : "\uD83D\uDD12 Mode Etudiant"}</button>
       </div>
     </div>
   );
