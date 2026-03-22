@@ -12,6 +12,8 @@ import M06 from './modules/M06_Unified_Projet';
 import GameBubbleSort from './modules/Game_BubbleSort';
 import GameSnakeLoops from './modules/Game_SnakeLoops';
 import GameOOPFactory from './modules/Game_OOPFactory';
+import GameBottleFill from './modules/Game_BottleFill';
+import GameMaze from './modules/Game_MazeConditions';
 
 const C = {
   bg: "#0a0f1a", card: "#111827", primary: "#0D7377", secondary: "#14A3C7",
@@ -42,6 +44,8 @@ const PHASES = [
 ];
 
 const GAMES = [
+  { id: "g-bottle", title: "La Potion de Vérité", desc: "Remplissez la bouteille en évaluant les conditions — erreurs = elle se vide !", icon: "🧪", component: GameBottleFill, module: "M01" },
+  { id: "g-maze", title: "Le Labyrinthe des Conditions", desc: "Traversez le labyrinthe en choisissant le bon chemin (true/false)", icon: "🏰", component: GameMaze, module: "M01" },
   { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres en les échangeant — visualisez l'algorithme", icon: "🫧", component: GameBubbleSort, module: "M02" },
   { id: "g-snake", title: "Le Serpent des Boucles", desc: "Réglez les paramètres de la boucle, prédisez la longueur du serpent", icon: "🐍", component: GameSnakeLoops, module: "M02" },
   { id: "g-factory", title: "L'Usine à Objets", desc: "Assemblez une classe Java pièce par pièce dans l'usine", icon: "🏭", component: GameOOPFactory, module: "M03" },
