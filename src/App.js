@@ -15,6 +15,7 @@ import M10 from './modules/M10_Unified_Standards';
 import M11 from './modules/M11_Unified_EscapeRoom';
 import M12 from './modules/M12_Unified_Fichiers';
 import M13 from './modules/M13_Unified_BDD';
+import M14 from './modules/M14_Unified_Swing';
 
 // Import standalone visual games
 import GameBubbleSort from './modules/Game_BubbleSort';
@@ -36,6 +37,7 @@ const MODULES = [
   { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true },
   { id: "m04", title: "M04 — Data", desc: "String, ArrayList, CRUD", phase: 1, component: M04, ready: true },
   { id: "m05", title: "M05 — Héritage", desc: "extends, super, protected, polymorphisme", phase: 2, component: M05, ready: true },
+  { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 2, component: M14, ready: true },
   { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true },
   { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true },
   { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true },
