@@ -40,6 +40,7 @@ export default function TeacherDashboard(){
   const [gameScores,setGameScores]=useState([]);
   const [comments,setComments]=useState([]);
   const [filterCohort,setFilterCohort]=useState('all');
+  const [filterClass,setFilterClass]=useState('all');
   const [loading,setLoading]=useState(true);
   const [tab,setTab]=useState('overview');
   const [expandedStudent,setExpandedStudent]=useState(null);
@@ -60,7 +61,9 @@ export default function TeacherDashboard(){
     setGameScores(gR.data||[]);setComments(cR.data||[]);setLoading(false);
   }
 
-  const filtered=filterCohort==='all'?students.filter(s=>s.role!=='teacher'):students.filter(s=>s.cohort===filterCohort&&s.role!=='teacher');
+  const allStudents=students.filter(s=>s.role!=='teacher');
+  const filtered=allStudents.filter(s=>(filterCohort==='all'||s.cohort===filterCohort)&&(filterClass==='all'||s.class_name===filterClass));
+  const classes=[...new Set(allStudents.map(s=>s.class_name).filter(Boolean))];
   const filteredIds=new Set(filtered.map(s=>s.id));
   const filteredProgress=progress.filter(p=>filteredIds.has(p.student_id));
 
@@ -124,8 +127,12 @@ export default function TeacherDashboard(){
             <div style={{fontSize:20,fontWeight:700,color:C.accent}}>Dashboard Enseignant</div>
           </div>
           <div style={{display:"flex",gap:8}}>
+            <select value={filterClass} onChange={e=>setFilterClass(e.target.value)} style={{padding:"6px 12px",borderRadius:6,border:"1px solid "+C.border,background:C.card,color:C.text,fontSize:11}}>
+              <option value="all">Toutes classes</option>
+              {classes.map(cl=><option key={cl} value={cl}>{cl}</option>)}
+            </select>
             <select value={filterCohort} onChange={e=>setFilterCohort(e.target.value)} style={{padding:"6px 12px",borderRadius:6,border:"1px solid "+C.border,background:C.card,color:C.text,fontSize:11}}>
-              <option value="all">Toutes cohortes</option>
+              <option value="all">Toutes annees</option>
               <option value="2025">2025-2026</option>
               <option value="2026">2026-2027</option>
             </select>

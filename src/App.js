@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy, MessageSquare } from 'lucide-react';
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 import { AuthProvider, useAuth } from './lib/AuthProvider';
+import { initSyncStorage, setupSyncStorage } from './lib/SyncStorage';
 import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 import StudentScorePage from './modules/StudentScorePage';
@@ -83,23 +84,8 @@ const GAMES = [
   { id: "g-tower", title: "Tower Defense", desc: "Placez des tours (try-catch, validation) contre les bugs", Icon: Shield, component: GameTowerDefense, module: "M07" },
 ];
 
-// Simple localStorage wrapper (replaces window.storage for web deployment)
-if (!window.storage) {
-  window.storage = {
-    async get(key) {
-      const val = localStorage.getItem(key);
-      return val ? { key, value: val } : null;
-    },
-    async set(key, value) {
-      localStorage.setItem(key, value);
-      return { key, value };
-    },
-    async delete(key) {
-      localStorage.removeItem(key);
-      return { key, deleted: true };
-    },
-  };
-}
+// Setup SyncStorage (localStorage + Supabase sync)
+setupSyncStorage();
 
 // Make sendPrompt a no-op on web (it's a Claude artifact feature)
 if (!window.sendPrompt) {
@@ -277,6 +263,13 @@ function AppInner() {
     const saved = localStorage.getItem("cq-cohort");
     if (saved) setCohort(saved);
   }, []);
+
+  // Init Supabase sync when student is loaded
+  useEffect(() => {
+    if (student?.id) {
+      initSyncStorage(student.id);
+    }
+  }, [student]);
 
   const selectCohort = (c) => {
     setCohort(c);

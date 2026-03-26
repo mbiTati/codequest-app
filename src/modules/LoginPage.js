@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../lib/AuthProvider';
+import { Eye, EyeOff } from 'lucide-react';
 
 const C = {
   bg: "#0a0f1a", card: "#111827", accent: "#32E0C4", gold: "#F59E0B",
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const [cohort, setCohort] = useState('2025');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
   const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e) => {
@@ -105,9 +107,13 @@ export default function LoginPage() {
             <input type="email" placeholder="Email" value={email}
               onChange={e => setEmail(e.target.value)} required style={inputStyle} />
           </div>
-          <div style={{ marginBottom: 16 }}>
-            <input type="password" placeholder="Mot de passe" value={password}
-              onChange={e => setPassword(e.target.value)} required minLength={6} style={inputStyle} />
+          <div style={{ marginBottom: 16, position: 'relative' }}>
+            <input type={showPwd ? "text" : "password"} placeholder="Mot de passe" value={password}
+              onChange={e => setPassword(e.target.value)} required minLength={6} style={{...inputStyle, paddingRight: 40}} />
+            <button type="button" onClick={() => setShowPwd(!showPwd)} style={{
+              position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+              background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 4,
+            }}>{showPwd ? <EyeOff size={16} /> : <Eye size={16} />}</button>
           </div>
 
           {error && (
