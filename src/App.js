@@ -24,6 +24,10 @@ import GameSnakeLoops from './modules/Game_SnakeLoops';
 import GameOOPFactory from './modules/Game_OOPFactory';
 import GameBottleFill from './modules/Game_BottleFill';
 import GameMaze from './modules/Game_MazeConditions';
+import GameSnakeJava from './modules/Game_SnakeJava';
+import GameTetrisOOP from './modules/Game_TetrisOOP';
+import GameMemoryCards from './modules/Game_MemoryCards';
+import GameTowerDefense from './modules/Game_TowerDefense';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -63,6 +67,10 @@ const GAMES = [
   { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres — visualisez l'algorithme", Icon: BarChart3, component: GameBubbleSort, module: "M02" },
   { id: "g-snake", title: "Le Serpent des Boucles", desc: "Prédisez la longueur du serpent", Icon: Repeat, component: GameSnakeLoops, module: "M02" },
   { id: "g-factory", title: "L'Usine à Objets", desc: "Assemblez une classe Java pièce par pièce", Icon: Box, component: GameOOPFactory, module: "M03" },
+  { id: "g-snakejava", title: "Snake Java", desc: "Dirigez le serpent, répondez aux questions boucles", Icon: Gamepad2, component: GameSnakeJava, module: "M02" },
+  { id: "g-tetris", title: "Tetris OOP", desc: "Chaque pièce = un concept OOP. Quiz toutes les 3 pièces", Icon: Box, component: GameTetrisOOP, module: "M03" },
+  { id: "g-memory", title: "Memory Java", desc: "Associez concept et définition en retournant les cartes", Icon: BookOpen, component: GameMemoryCards, module: "Tous" },
+  { id: "g-tower", title: "Tower Defense", desc: "Placez des tours (try-catch, validation) contre les bugs", Icon: Shield, component: GameTowerDefense, module: "M07" },
 ];
 
 // Simple localStorage wrapper (replaces window.storage for web deployment)
