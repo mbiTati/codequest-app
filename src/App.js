@@ -46,6 +46,8 @@ import GameCodeReading from './modules/Game_CodeReading';
 import GameUMLBuilder from './modules/Game_UMLBuilder';
 import GameCodeRacer from './modules/Game_CodeRacer';
 import BlockAnimations from './modules/BlockAnimations';
+import CoursPage from './modules/CoursPage';
+import GameCodeRunner from './modules/Game_CodeRunner';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -95,6 +97,7 @@ const GAMES = [
   { id: "g-uml", title: "UML Builder", desc: "Construisez des diagrammes de classes en glissant", Icon: GitBranch, component: GameUMLBuilder, module: "LO2" },
   { id: "g-racer", title: "Code Racer", desc: "Construis ta voiture en Java, fais-la courir !", Icon: Zap, component: GameCodeRacer, module: "M03/M05" },
   { id: "g-blocks", title: "Block Animations", desc: "Visualisez boucles, conditions, constructeurs en blocs", Icon: Box, component: BlockAnimations, module: "Tous" },
+  { id: "g-runner", title: "Code Runner", desc: "Fais courir ton personnage en ecrivant du Java !", Icon: Play, component: GameCodeRunner, module: "Tous" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
@@ -270,6 +273,7 @@ function AppInner() {
   const [showSettings, setShowSettings] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showQuizLive, setShowQuizLive] = useState(null); // null, 'host', 'player'
+  const [showCours, setShowCours] = useState(false);
   const { C } = useTheme();
   const { user, student, loading, signOut } = useAuth();
 
@@ -368,6 +372,19 @@ function AppInner() {
     );
   }
 
+  // Cours page
+  if (showCours) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowCours(false)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.gold, fontWeight: 600 }}>Cours & Documents</span>
+        </div>
+        <CoursPage />
+      </div>
+    );
+  }
+
   // Cohort selector
   if (!cohort) {
     return <CohortSelector onSelect={selectCohort} />;
@@ -450,7 +467,7 @@ function AppInner() {
         </div>
       </div>
 
-      <StudentHome onOpenModule={(id) => setCurrentModule(id)} />
+      <StudentHome onOpenModule={(id) => setCurrentModule(id)} onOpenCours={() => setShowCours(true)} />
       <Portal onSelectModule={setCurrentModule} />
       <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: "1px solid " + C.border, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
