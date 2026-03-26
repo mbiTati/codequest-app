@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy, MessageSquare } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy, MessageSquare, Star } from 'lucide-react';
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 import { AuthProvider, useAuth } from './lib/AuthProvider';
 import { initSyncStorage, setupSyncStorage } from './lib/SyncStorage';
