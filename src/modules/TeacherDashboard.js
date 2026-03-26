@@ -7,7 +7,7 @@ const C = {
   primary: "#0D7377", success: "#10B981", dimmed: "#64748b",
 };
 
-const TEACHER_EMAILS = ['tatiana@schulz.ch', 'admin@schulz.ch']; // ajuster
+const TEACHER_EMAILS = ['tati.b@hotmail.fr']; // ajuster
 
 export default function TeacherDashboard() {
   const [students, setStudents] = useState([]);
