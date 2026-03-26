@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, Lock, Unlock, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings } from 'lucide-react';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -254,24 +254,15 @@ function CohortSelector({ onSelect }) {
 export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
   const [cohort, setCohort] = useState(null);
-  const [isTeacher, setIsTeacher] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("cq-cohort");
     if (saved) setCohort(saved);
-    const t = localStorage.getItem("cq-teacher");
-    if (t === "true") setIsTeacher(true);
   }, []);
 
   const selectCohort = (c) => {
     setCohort(c);
     localStorage.setItem("cq-cohort", c);
-  };
-
-  const toggleTeacher = () => {
-    const next = !isTeacher;
-    setIsTeacher(next);
-    localStorage.setItem("cq-teacher", String(next));
   };
 
   // Show cohort selector first
@@ -306,7 +297,7 @@ export default function App() {
           </span>
         </div>
         <ActiveComponent />
-        {mod && <ResourcesBar moduleId={mod.id} isTeacher={isTeacher} />}
+        {mod && <ResourcesBar moduleId={mod.id} />}
       </div>
     );
   }
@@ -315,21 +306,14 @@ export default function App() {
     <div>
       <Portal onSelectModule={setCurrentModule} />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px" }}>
-        <PortalResources isTeacher={isTeacher} />
+        <PortalResources />
       </div>
-      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}`, display: "flex", justifyContent: "center", gap: 12 }}>
+      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}` }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
           padding: "4px 12px", borderRadius: 5, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dimmed, cursor: "pointer",
           fontFamily: "'Segoe UI',sans-serif", fontSize: 10,
         }}>{"Changer de cohorte (" + (cohort === "2025" ? "2025-2026" : "2026-2027") + ")"}</button>
-        <button onClick={toggleTeacher} style={{
-          padding: "4px 12px", borderRadius: 5,
-          border: `1px solid ${isTeacher ? C.gold : C.border}`,
-          background: isTeacher ? C.gold + "15" : "transparent",
-          color: isTeacher ? C.gold : C.dimmed, cursor: "pointer",
-          fontFamily: "'Segoe UI',sans-serif", fontSize: 10, fontWeight: isTeacher ? 600 : 400,
-        }}>{isTeacher ? <><Unlock size={12} style={{marginRight:4,verticalAlign:"middle"}}/> Mode Enseignant</> : <><Lock size={12} style={{marginRight:4,verticalAlign:"middle"}}/> Mode Etudiant</>}</button>
       </div>
     </div>
   );

@@ -1,30 +1,25 @@
-import { FileText, Download, ExternalLink, Coffee, CheckCircle, Presentation, ChevronRight, FolderOpen, BookOpen } from "lucide-react";
 import { useState } from "react";
-
-// GitHub links removed for security
+import { FileText, Download, Coffee, ChevronRight, FolderOpen, BookOpen } from "lucide-react";
 
 const C = {
   bg: "#0a0f1a", card: "#111827", accent: "#32E0C4", gold: "#F59E0B",
   text: "#e2e8f0", muted: "#94a3b8", dimmed: "#64748b", border: "#1e293b",
-  primary: "#0D7377", success: "#10B981", danger: "#EF4444",
+  primary: "#0D7377", success: "#10B981",
 };
 
-// Map module IDs to their Java file paths
 const JAVA_FILES = {
-  m01: { starter: "Distributeur.java", correction: "Distributeur_CORRECTION.java", folder: "m01" },
-  m02: { starter: "LaboStats.java", correction: "LaboStats_CORRECTION.java", folder: "m02" },
-  m03: { starter: "Invention.java", correction: "Invention_CORRECTION.java", folder: "m03" },
-  m04: { starter: "GestionInventeurs.java", correction: "GestionInventeurs_CORRECTION.java", folder: "m04" },
-  m05: { starter: "TestHeritage.java", correction: "TestHeritage_CORRECTION.java", folder: "m05" },
-  m07: { starter: "CatalogueInsecure.java", correction: "CatalogueInsecure_CORRECTION.java", folder: "m07" },
-  m09: { starter: "CatalogueBuggy.java", correction: "CatalogueBuggy_CORRECTION.java", folder: "m09" },
-  m10: { starter: "GestionInventions_SALE.java", correction: "GestionInventions_PROPRE.java", folder: "m10" },
-  m12: { starter: "CatalogueFichiers.java", correction: "CatalogueFichiers_CORRECTION.java", folder: "m12" },
-  m13: { starter: "LaboJDBC.java", correction: "LaboJDBC_CORRECTION.java", folder: "m13" },
-  m14: { starter: "LaboGUI.java", correction: "LaboGUI_CORRECTION.java", folder: "m14" },
+  m01: { starter: "Distributeur.java", folder: "m01" },
+  m02: { starter: "LaboStats.java", folder: "m02" },
+  m03: { starter: "Invention.java", folder: "m03" },
+  m04: { starter: "GestionInventeurs.java", folder: "m04" },
+  m05: { starter: "TestHeritage.java", folder: "m05" },
+  m07: { starter: "CatalogueInsecure.java", folder: "m07" },
+  m09: { starter: "CatalogueBuggy.java", folder: "m09" },
+  m10: { starter: "GestionInventions_SALE.java", folder: "m10" },
+  m12: { starter: "CatalogueFichiers.java", folder: "m12" },
+  m13: { starter: "LaboJDBC.java", folder: "m13" },
+  m14: { starter: "LaboGUI.java", folder: "m14" },
 };
-
-// GitHub paths removed
 
 function Btn({ href, icon, label, color = C.accent }) {
   return (
@@ -35,58 +30,36 @@ function Btn({ href, icon, label, color = C.accent }) {
       background: color + "10", color,
       textDecoration: "none", fontSize: 10, fontWeight: 600,
       fontFamily: "'Segoe UI',system-ui,sans-serif",
-      cursor: "pointer", transition: "all .15s",
+      cursor: "pointer",
     }}>
-      <span style={{ fontSize: 12 }}>{icon}</span>{label}
+      <span style={{ display: "flex", alignItems: "center" }}>{icon}</span>{label}
     </a>
   );
 }
 
-export function ResourcesBar({ moduleId, isTeacher = false }) {
+export function ResourcesBar({ moduleId }) {
   const [open, setOpen] = useState(false);
   const java = JAVA_FILES[moduleId];
-  
-  const hasJava = !!java;
 
   return (
     <div style={{
       background: C.card, borderTop: "1px solid " + C.border,
       padding: open ? "10px 16px" : "6px 16px",
-      transition: "all .2s",
     }}>
       <button onClick={() => setOpen(!open)} style={{
         background: "none", border: "none", color: C.muted,
         cursor: "pointer", fontFamily: "inherit", fontSize: 11,
         display: "flex", alignItems: "center", gap: 6, padding: 0,
       }}>
-        <span style={{ fontSize: 8, transition: "transform .2s", transform: open ? "rotate(90deg)" : "none" }}><ChevronRight size={10}/></span>
-        <><FolderOpen size={12}/> Ressources et fichiers</>
+        <ChevronRight size={10} style={{ transition: "transform .2s", transform: open ? "rotate(90deg)" : "none" }} />
+        <FolderOpen size={12} /> Ressources
       </button>
 
       {open && (
         <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {/* Memos */}
-          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon=<FileText size={12}/> label="Memo PDF" color={C.gold} />
-          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon=<BookOpen size={12}/> label="Memo DOCX" color={C.gold} />
-
-          {/* Java files */}
-          {hasJava && (
-            <>
-              <Btn href={"/docs/java/" + java.folder + "/" + java.starter} icon=<Coffee size={12}/> label={"Starter " + java.starter} color={C.accent} />
-              {isTeacher && (
-                <Btn href={"/docs/java/" + java.folder + "/" + java.correction} icon=<CheckCircle size={12}/> label="Correction" color={C.success} />
-              )}
-            </>
-          )}
-
-
-
-          {/* PPT for teacher */}
-          {isTeacher && (
-            <>
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon=<Presentation size={12}/> label="PPT M01-M08" color={C.primary} />
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon=<Presentation size={12}/> label="PPT M09-M14" color={C.primary} />
-            </>
+          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon={<BookOpen size={12}/>} label="Fiches Memo (PDF)" color={C.gold} />
+          {java && (
+            <Btn href={"/docs/java/" + java.folder + "/" + java.starter} icon={<Coffee size={12}/>} label={java.starter} color={C.accent} />
           )}
         </div>
       )}
@@ -94,45 +67,27 @@ export function ResourcesBar({ moduleId, isTeacher = false }) {
   );
 }
 
-export function PortalResources({ isTeacher = false }) {
+export function PortalResources() {
   return (
     <div style={{
       background: C.card, borderRadius: 12, padding: 16,
       border: "1px solid " + C.border, margin: "12px 0",
     }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>
-        <><FolderOpen size={14}/> Documents du cours</>
+      <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+        <FolderOpen size={16} /> Documents
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-        {/* Memos etudiants */}
         <div style={{ background: C.gold + "10", borderRadius: 8, padding: 10, border: "1px solid " + C.gold + "30" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: C.gold, marginBottom: 6 }}>
-            <><BookOpen size={12}/> Fiches Memo Etudiants</>
+          <div style={{ fontSize: 11, fontWeight: 600, color: C.gold, marginBottom: 6, display: "flex", alignItems: "center", gap: 4 }}>
+            <BookOpen size={12} /> Fiches Memo
           </div>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon=<FileText size={12}/> label="15 fiches PDF" color={C.gold} />
-            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon=<BookOpen size={12}/> label="DOCX modifiable" color={C.gold} />
-          </div>
+          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon={<FileText size={12}/>} label="15 fiches PDF" color={C.gold} />
         </div>
 
-        {/* PPT enseignant */}
-        {isTeacher && (
-          <div style={{ background: C.primary + "10", borderRadius: 8, padding: 10, border: "1px solid " + C.primary + "30" }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: C.accent, marginBottom: 6 }}>
-              <><Presentation size={12}/> PPT Enseignant</>
-            </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon=<Presentation size={12}/> label="M01-M08 (25 slides)" color={C.primary} />
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon=<Presentation size={12}/> label="M09-M14 (15 slides)" color={C.primary} />
-            </div>
-          </div>
-        )}
-
-        {/* Java starters */}
-        <div style={{ background: C.accent + "08", borderRadius: 8, padding: 10, border: "1px solid " + C.accent + "20", gridColumn: isTeacher ? "auto" : "1 / -1" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: C.accent, marginBottom: 6 }}>
-            <><Coffee size={12}/> Fichiers Java Eclipse</>
+        <div style={{ background: C.accent + "08", borderRadius: 8, padding: 10, border: "1px solid " + C.accent + "20" }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: C.accent, marginBottom: 6, display: "flex", alignItems: "center", gap: 4 }}>
+            <Coffee size={12} /> Fichiers Java Eclipse
           </div>
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
             {Object.entries(JAVA_FILES).map(([mod, files]) => (
@@ -148,31 +103,7 @@ export function PortalResources({ isTeacher = false }) {
             ))}
           </div>
         </div>
-
-        {/* Corrections (teacher only) */}
-        {isTeacher && (
-          <div style={{ background: C.success + "08", borderRadius: 8, padding: 10, border: "1px solid " + C.success + "20" }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: C.success, marginBottom: 6 }}>
-              <><CheckCircle size={12}/> Corrections Java</>
-            </div>
-            <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-              {Object.entries(JAVA_FILES).map(([mod, files]) => (
-                <a key={mod} href={"/docs/java/" + files.folder + "/" + files.correction} download
-                  style={{
-                    padding: "3px 8px", borderRadius: 5,
-                    background: C.success + "15", color: C.success,
-                    fontSize: 9, fontWeight: 600, textDecoration: "none",
-                    border: "1px solid " + C.success + "25",
-                  }}>
-                  {mod.toUpperCase()}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
-
-      
     </div>
   );
 }
