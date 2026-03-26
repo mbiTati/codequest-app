@@ -49,6 +49,7 @@ import BlockAnimations from './modules/BlockAnimations';
 import CoursPage from './modules/CoursPage';
 import GameCodeRunner from './modules/Game_CodeRunner';
 import { Game_StackQueue, Game_EventCatcher, Game_CodeCleaner, Game_AlgoToCode, Game_ScopeAnimation, Game_StylePolice } from './modules/Game_NewGames';
+import GameCodeStudio from './modules/Game_CodeStudio';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -88,6 +89,7 @@ const PHASES = [
 ];
 
 const GAMES = [
+  { id: "g-studio", title: "CodeQuest Studio", desc: "Programme ton Robot/Chat/Ninja en Java — il prend vie !", Icon: Star, component: GameCodeStudio, module: "Tous" },
   { id: "g-bottle", title: "La Potion de Vérité", desc: "Évaluez les conditions — erreurs = elle se vide !", Icon: FlaskConical, component: GameBottleFill, module: "M01" },
   { id: "g-maze", title: "Le Labyrinthe des Conditions", desc: "Choisissez le bon chemin (true/false)", Icon: Map, component: GameMaze, module: "M01" },
   { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres — visualisez l'algorithme", Icon: BarChart3, component: GameBubbleSort, module: "M02" },
