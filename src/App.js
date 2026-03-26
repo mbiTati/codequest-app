@@ -10,6 +10,8 @@ import SettingsPage from './modules/SettingsPage';
 import { CommentButton } from './modules/CommentWidget';
 import JavaEditor from './modules/JavaEditor';
 import StudentHome from './modules/StudentHome';
+import QuizLiveHost from './modules/QuizLiveHost';
+import QuizLivePlayer from './modules/QuizLivePlayer';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -265,6 +267,7 @@ function AppInner() {
   const [showScores, setShowScores] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [showQuizLive, setShowQuizLive] = useState(null); // null, 'host', 'player'
   const { C } = useTheme();
   const { user, student, loading, signOut } = useAuth();
 
@@ -350,6 +353,19 @@ function AppInner() {
     );
   }
 
+  // Quiz Live
+  if (showQuizLive) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowQuizLive(null)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.gold, fontWeight: 600 }}>Quiz Live</span>
+        </div>
+        {showQuizLive === 'host' ? <QuizLiveHost /> : <QuizLivePlayer />}
+      </div>
+    );
+  }
+
   // Cohort selector
   if (!cohort) {
     return <CohortSelector onSelect={selectCohort} />;
@@ -403,6 +419,12 @@ function AppInner() {
             background: C.gold + "10", color: C.gold, cursor: "pointer",
             fontFamily: "inherit", fontSize: 10, fontWeight: 600,
           }}><MessageSquare size={12} /> Aide</button>
+          <button onClick={() => setShowQuizLive(isTeacher ? 'host' : 'player')} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.danger + "40",
+            background: C.danger + "10", color: C.danger, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10, fontWeight: 600,
+          }}><Zap size={12} /> {isTeacher ? "Quiz Live" : "Rejoindre"}</button>
           <button onClick={() => setShowSettings(true)} style={{
             display: "flex", alignItems: "center", gap: 4,
             padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.border,
