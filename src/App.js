@@ -45,6 +45,7 @@ import GameDebuggingRace from './modules/Game_DebuggingRace';
 import GameCodeReading from './modules/Game_CodeReading';
 import GameUMLBuilder from './modules/Game_UMLBuilder';
 import GameCodeRacer from './modules/Game_CodeRacer';
+import BlockAnimations from './modules/BlockAnimations';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -93,6 +94,7 @@ const GAMES = [
   { id: "g-reader", title: "Lecture de Code", desc: "Lisez le code, predisez la sortie", Icon: BookOpen, component: GameCodeReading, module: "LO1" },
   { id: "g-uml", title: "UML Builder", desc: "Construisez des diagrammes de classes en glissant", Icon: GitBranch, component: GameUMLBuilder, module: "LO2" },
   { id: "g-racer", title: "Code Racer", desc: "Construis ta voiture en Java, fais-la courir !", Icon: Zap, component: GameCodeRacer, module: "M03/M05" },
+  { id: "g-blocks", title: "Block Animations", desc: "Visualisez boucles, conditions, constructeurs en blocs", Icon: Box, component: BlockAnimations, module: "Tous" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
