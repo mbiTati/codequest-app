@@ -42,7 +42,7 @@ const MODULES = [
   { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 2, component: M14, ready: true, Icon: Layout },
   { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true, Icon: Code },
   { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true, Icon: Shield },
-  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true, Icon: Package },
+  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, compilation, deploiement", phase: 2, component: M08, ready: true, Icon: Package },
   { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true, Icon: Bug },
   { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true, Icon: CheckSquare },
   { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true, Icon: Puzzle },
@@ -110,7 +110,7 @@ function Portal({ onSelectModule }) {
               { t: "3. Codez dans Eclipse", d: "Quand indiqué, ouvrez Eclipse et tapez le code (pas de copier-coller !)." },
               { t: "4. Exercice seul", d: "Faites l'exercice AVANT la correction. Testez avec les cas fournis." },
               { t: "5. Débloquez le mémo", d: "Terminez tout pour débloquer la fiche récapitulative." },
-              { t: "6. Soumettez", d: "Envoyez votre code à l'enseignant ou poussez sur GitHub." },
+              { t: "6. Soumettez", d: "Envoyez votre code à l'enseignant." },
             ].map((h, i) => (
               <div key={i} style={{ background: C.card, borderRadius: 10, padding: "10px 12px", border: `1px solid ${C.border}` }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{h.t}</div>

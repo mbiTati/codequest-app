@@ -1,7 +1,7 @@
 import { FileText, Download, ExternalLink, Coffee, CheckCircle, Presentation, ChevronRight, FolderOpen, BookOpen } from "lucide-react";
 import { useState } from "react";
 
-const GITHUB_BASE = "https://github.com/mbiTati/unit1LO3LO4/tree/main";
+// GitHub links removed for security
 
 const C = {
   bg: "#0a0f1a", card: "#111827", accent: "#32E0C4", gold: "#F59E0B",
@@ -24,19 +24,7 @@ const JAVA_FILES = {
   m14: { starter: "LaboGUI.java", correction: "LaboGUI_CORRECTION.java", folder: "m14" },
 };
 
-const GITHUB_PATHS = {
-  m01: "phase1-rattrapage/01-basiques-conditions",
-  m02: "phase1-rattrapage/02-boucles",
-  m03: "phase1-rattrapage/03-oop-fondamentaux",
-  m04: "phase1-rattrapage/04-manipulation-data",
-  m05: "phase2-LO3/05-heritage",
-  m07: "phase2-LO3/07-securite",
-  m09: "phase3-LO4/09-debugging",
-  m10: "phase3-LO4/10-standards",
-  m12: "phase2-LO3/12-fichiers",
-  m13: "phase2-LO3/13-bdd",
-  m14: "phase2-LO3/14-swing-events",
-};
+// GitHub paths removed
 
 function Btn({ href, icon, label, color = C.accent }) {
   return (
@@ -57,7 +45,7 @@ function Btn({ href, icon, label, color = C.accent }) {
 export function ResourcesBar({ moduleId, isTeacher = false }) {
   const [open, setOpen] = useState(false);
   const java = JAVA_FILES[moduleId];
-  const ghPath = GITHUB_PATHS[moduleId];
+  
   const hasJava = !!java;
 
   return (
@@ -91,10 +79,7 @@ export function ResourcesBar({ moduleId, isTeacher = false }) {
             </>
           )}
 
-          {/* GitHub link */}
-          {ghPath && (
-            <Btn href={GITHUB_BASE + "/" + ghPath} icon=<ExternalLink size={12}/> label="GitHub" color={C.muted} />
-          )}
+
 
           {/* PPT for teacher */}
           {isTeacher && (
@@ -187,13 +172,7 @@ export function PortalResources({ isTeacher = false }) {
         )}
       </div>
 
-      {/* GitHub repo link */}
-      <div style={{ marginTop: 10, textAlign: "center" }}>
-        <a href="https://github.com/mbiTati/unit1LO3LO4" target="_blank" rel="noopener noreferrer"
-          style={{ fontSize: 10, color: C.muted, textDecoration: "none" }}>
-          <><ExternalLink size={10}/> Repo GitHub complet : github.com/mbiTati/unit1LO3LO4</>
-        </a>
-      </div>
+      
     </div>
   );
 }
