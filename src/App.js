@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, Lock, Unlock, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings } from 'lucide-react';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -32,21 +33,21 @@ const C = {
 };
 
 const MODULES = [
-  { id: "m00", title: "M00 — Fondamentaux", desc: "Pipeline, Stacks/Queues, Events, IDE", phase: 0, component: M00, ready: true },
-  { id: "m01", title: "M01 — Conditions", desc: "if/else, switch, &&, ||", phase: 1, component: M01, ready: true },
-  { id: "m02", title: "M02 — Boucles", desc: "for, while, break, continue", phase: 1, component: M02, ready: true },
-  { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true },
-  { id: "m04", title: "M04 — Data", desc: "String, ArrayList, CRUD", phase: 1, component: M04, ready: true },
-  { id: "m05", title: "M05 — Héritage", desc: "extends, super, protected, polymorphisme", phase: 2, component: M05, ready: true },
-  { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 2, component: M14, ready: true },
-  { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true },
-  { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true },
-  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true },
-  { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true },
-  { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true },
-  { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true },
-  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: M12, ready: true },
-  { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: M13, ready: true },
+  { id: "m00", title: "M00 — Fondamentaux", desc: "Pipeline, Stacks/Queues, Events, IDE", phase: 0, component: M00, ready: true, Icon: Settings },
+  { id: "m01", title: "M01 — Conditions", desc: "if/else, switch, &&, ||", phase: 1, component: M01, ready: true, Icon: Zap },
+  { id: "m02", title: "M02 — Boucles", desc: "for, while, break, continue", phase: 1, component: M02, ready: true, Icon: Repeat },
+  { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true, Icon: Box },
+  { id: "m04", title: "M04 — Data", desc: "String, ArrayList, CRUD", phase: 1, component: M04, ready: true, Icon: Database },
+  { id: "m05", title: "M05 — Héritage", desc: "extends, super, protected, polymorphisme", phase: 2, component: M05, ready: true, Icon: GitBranch },
+  { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 2, component: M14, ready: true, Icon: Layout },
+  { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true, Icon: Code },
+  { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true, Icon: Shield },
+  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, GitHub release", phase: 2, component: M08, ready: true, Icon: Package },
+  { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true, Icon: Bug },
+  { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true, Icon: CheckSquare },
+  { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true, Icon: Puzzle },
+  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: M12, ready: true, Icon: FileText },
+  { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: M13, ready: true, Icon: HardDrive },
 ];
 
 const PHASES = [
@@ -57,11 +58,11 @@ const PHASES = [
 ];
 
 const GAMES = [
-  { id: "g-bottle", title: "La Potion de Vérité", desc: "Remplissez la bouteille en évaluant les conditions — erreurs = elle se vide !", icon: "🧪", component: GameBottleFill, module: "M01" },
-  { id: "g-maze", title: "Le Labyrinthe des Conditions", desc: "Traversez le labyrinthe en choisissant le bon chemin (true/false)", icon: "🏰", component: GameMaze, module: "M01" },
-  { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres en les échangeant — visualisez l'algorithme", icon: "🫧", component: GameBubbleSort, module: "M02" },
-  { id: "g-snake", title: "Le Serpent des Boucles", desc: "Réglez les paramètres de la boucle, prédisez la longueur du serpent", icon: "🐍", component: GameSnakeLoops, module: "M02" },
-  { id: "g-factory", title: "L'Usine à Objets", desc: "Assemblez une classe Java pièce par pièce dans l'usine", icon: "🏭", component: GameOOPFactory, module: "M03" },
+  { id: "g-bottle", title: "La Potion de Vérité", desc: "Évaluez les conditions — erreurs = elle se vide !", Icon: FlaskConical, component: GameBottleFill, module: "M01" },
+  { id: "g-maze", title: "Le Labyrinthe des Conditions", desc: "Choisissez le bon chemin (true/false)", Icon: Map, component: GameMaze, module: "M01" },
+  { id: "g-bubble", title: "Bubble Sort", desc: "Triez les nombres — visualisez l'algorithme", Icon: BarChart3, component: GameBubbleSort, module: "M02" },
+  { id: "g-snake", title: "Le Serpent des Boucles", desc: "Prédisez la longueur du serpent", Icon: Repeat, component: GameSnakeLoops, module: "M02" },
+  { id: "g-factory", title: "L'Usine à Objets", desc: "Assemblez une classe Java pièce par pièce", Icon: Box, component: GameOOPFactory, module: "M03" },
 ];
 
 // Simple localStorage wrapper (replaces window.storage for web deployment)
@@ -150,6 +151,7 @@ function Portal({ onSelectModule }) {
                     transition: "all .2s",
                   }}
                 >
+                  {mod.Icon && <mod.Icon size={18} color={mod.ready ? phase.color : C.dimmed} strokeWidth={1.5} />}
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: mod.ready ? C.text : C.dimmed }}>{mod.title}</div>
                     <div style={{ fontSize: 11, color: C.muted }}>{mod.desc}</div>
@@ -187,10 +189,10 @@ function Portal({ onSelectModule }) {
                   transition: "all .2s",
                 }}
               >
-                <div style={{ fontSize: 24, marginBottom: 6 }}>{game.icon}</div>
+                <div style={{ marginBottom: 6 }}>{game.Icon && <game.Icon size={24} color={C.gold} strokeWidth={1.5} />}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{game.title}</div>
                 <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{game.desc}</div>
-                <div style={{ marginTop: 8, fontSize: 10, color: C.gold, fontWeight: 600 }}>Lié au {game.module}</div>
+                <div style={{ marginTop: 8, fontSize: 10, color: C.gold, fontWeight: 600 }}>{"Li\u00e9 au " + game.module}</div>
               </div>
             ))}
           </div>
@@ -319,7 +321,7 @@ export default function App() {
           background: isTeacher ? C.gold + "15" : "transparent",
           color: isTeacher ? C.gold : C.dimmed, cursor: "pointer",
           fontFamily: "'Segoe UI',sans-serif", fontSize: 10, fontWeight: isTeacher ? 600 : 400,
-        }}>{isTeacher ? "\uD83D\uDD13 Mode Enseignant" : "\uD83D\uDD12 Mode Etudiant"}</button>
+        }}>{isTeacher ? <><Unlock size={12} style={{marginRight:4,verticalAlign:"middle"}}/> Mode Enseignant</> : <><Lock size={12} style={{marginRight:4,verticalAlign:"middle"}}/> Mode Etudiant</>}</button>
       </div>
     </div>
   );

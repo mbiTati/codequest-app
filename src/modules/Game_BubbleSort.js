@@ -162,7 +162,7 @@ export default function BubbleSortGame() {
       <div style={{ animation: "fadeIn .4s", textAlign: "center", maxWidth: 480 }}>
         <div style={{ fontSize: 12, letterSpacing: 3, color: C.dimmed, marginBottom: 8 }}>CODEQUEST · ARCADE</div>
         <div style={{ fontSize: 28, fontWeight: 800, color: C.accent, marginBottom: 4 }}>Bubble Sort</div>
-        <div style={{ fontSize: 16, marginBottom: 8 }}>🫧</div>
+        <div style={{ fontSize: 16, marginBottom: 8 }}>Bubble Sort</div>
         <div style={{ fontSize: 14, color: C.muted, marginBottom: 24, lineHeight: 1.6 }}>
           Visualisez l'algorithme de tri à bulles ! Les barres se comparent deux par deux — si la gauche est plus grande, elles s'échangent. Étape par étape ou en automatique.
         </div>

@@ -1,3 +1,4 @@
+import { FileText, Download, ExternalLink, Coffee, CheckCircle, Presentation, ChevronRight, FolderOpen, BookOpen } from "lucide-react";
 import { useState } from "react";
 
 const GITHUB_BASE = "https://github.com/mbiTati/unit1LO3LO4/tree/main";
@@ -70,36 +71,36 @@ export function ResourcesBar({ moduleId, isTeacher = false }) {
         cursor: "pointer", fontFamily: "inherit", fontSize: 11,
         display: "flex", alignItems: "center", gap: 6, padding: 0,
       }}>
-        <span style={{ fontSize: 8, transition: "transform .2s", transform: open ? "rotate(90deg)" : "none" }}>{"\u25B6"}</span>
-        {"\uD83D\uDCC1 Ressources et fichiers"}
+        <span style={{ fontSize: 8, transition: "transform .2s", transform: open ? "rotate(90deg)" : "none" }}><ChevronRight size={10}/></span>
+        <><FolderOpen size={12}/> Ressources et fichiers</>
       </button>
 
       {open && (
         <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
           {/* Memos */}
-          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon={"\uD83D\uDCCB"} label="Memo PDF" color={C.gold} />
-          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon={"\uD83D\uDCDD"} label="Memo DOCX" color={C.gold} />
+          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon=<FileText size={12}/> label="Memo PDF" color={C.gold} />
+          <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon=<BookOpen size={12}/> label="Memo DOCX" color={C.gold} />
 
           {/* Java files */}
           {hasJava && (
             <>
-              <Btn href={"/docs/java/" + java.folder + "/" + java.starter} icon={"\u2615"} label={"Starter " + java.starter} color={C.accent} />
+              <Btn href={"/docs/java/" + java.folder + "/" + java.starter} icon=<Coffee size={12}/> label={"Starter " + java.starter} color={C.accent} />
               {isTeacher && (
-                <Btn href={"/docs/java/" + java.folder + "/" + java.correction} icon={"\u2705"} label="Correction" color={C.success} />
+                <Btn href={"/docs/java/" + java.folder + "/" + java.correction} icon=<CheckCircle size={12}/> label="Correction" color={C.success} />
               )}
             </>
           )}
 
           {/* GitHub link */}
           {ghPath && (
-            <Btn href={GITHUB_BASE + "/" + ghPath} icon={"\uD83D\uDD17"} label="GitHub" color={C.muted} />
+            <Btn href={GITHUB_BASE + "/" + ghPath} icon=<ExternalLink size={12}/> label="GitHub" color={C.muted} />
           )}
 
           {/* PPT for teacher */}
           {isTeacher && (
             <>
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon={"\uD83D\uDCCA"} label="PPT M01-M08" color={C.primary} />
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon={"\uD83D\uDCCA"} label="PPT M09-M14" color={C.primary} />
+              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon=<Presentation size={12}/> label="PPT M01-M08" color={C.primary} />
+              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon=<Presentation size={12}/> label="PPT M09-M14" color={C.primary} />
             </>
           )}
         </div>
@@ -115,18 +116,18 @@ export function PortalResources({ isTeacher = false }) {
       border: "1px solid " + C.border, margin: "12px 0",
     }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>
-        {"\uD83D\uDCC1 Documents du cours"}
+        <><FolderOpen size={14}/> Documents du cours</>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         {/* Memos etudiants */}
         <div style={{ background: C.gold + "10", borderRadius: 8, padding: 10, border: "1px solid " + C.gold + "30" }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: C.gold, marginBottom: 6 }}>
-            {"\uD83D\uDCCB Fiches Memo Etudiants"}
+            <><BookOpen size={12}/> Fiches Memo Etudiants</>
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon={"\uD83D\uDCC4"} label="15 fiches PDF" color={C.gold} />
-            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon={"\uD83D\uDCDD"} label="DOCX modifiable" color={C.gold} />
+            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.pdf" icon=<FileText size={12}/> label="15 fiches PDF" color={C.gold} />
+            <Btn href="/docs/memos/CodeQuest_Memos_Etudiants_M00-M14.docx" icon=<BookOpen size={12}/> label="DOCX modifiable" color={C.gold} />
           </div>
         </div>
 
@@ -134,11 +135,11 @@ export function PortalResources({ isTeacher = false }) {
         {isTeacher && (
           <div style={{ background: C.primary + "10", borderRadius: 8, padding: 10, border: "1px solid " + C.primary + "30" }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: C.accent, marginBottom: 6 }}>
-              {"\uD83D\uDCCA PPT Enseignant"}
+              <><Presentation size={12}/> PPT Enseignant</>
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon={"\uD83D\uDCCA"} label="M01-M08 (25 slides)" color={C.primary} />
-              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon={"\uD83D\uDCCA"} label="M09-M14 (15 slides)" color={C.primary} />
+              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M01-M08.pptx" icon=<Presentation size={12}/> label="M01-M08 (25 slides)" color={C.primary} />
+              <Btn href="/docs/ppt/CodeQuest_PPT_Enseignant_M09-M14.pptx" icon=<Presentation size={12}/> label="M09-M14 (15 slides)" color={C.primary} />
             </div>
           </div>
         )}
@@ -146,7 +147,7 @@ export function PortalResources({ isTeacher = false }) {
         {/* Java starters */}
         <div style={{ background: C.accent + "08", borderRadius: 8, padding: 10, border: "1px solid " + C.accent + "20", gridColumn: isTeacher ? "auto" : "1 / -1" }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: C.accent, marginBottom: 6 }}>
-            {"\u2615 Fichiers Java Eclipse"}
+            <><Coffee size={12}/> Fichiers Java Eclipse</>
           </div>
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
             {Object.entries(JAVA_FILES).map(([mod, files]) => (
@@ -167,7 +168,7 @@ export function PortalResources({ isTeacher = false }) {
         {isTeacher && (
           <div style={{ background: C.success + "08", borderRadius: 8, padding: 10, border: "1px solid " + C.success + "20" }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: C.success, marginBottom: 6 }}>
-              {"\u2705 Corrections Java"}
+              <><CheckCircle size={12}/> Corrections Java</>
             </div>
             <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
               {Object.entries(JAVA_FILES).map(([mod, files]) => (
@@ -190,7 +191,7 @@ export function PortalResources({ isTeacher = false }) {
       <div style={{ marginTop: 10, textAlign: "center" }}>
         <a href="https://github.com/mbiTati/unit1LO3LO4" target="_blank" rel="noopener noreferrer"
           style={{ fontSize: 10, color: C.muted, textDecoration: "none" }}>
-          {"\uD83D\uDD17 Repo GitHub complet : github.com/mbiTati/unit1LO3LO4"}
+          <><ExternalLink size={10}/> Repo GitHub complet : github.com/mbiTati/unit1LO3LO4</>
         </a>
       </div>
     </div>

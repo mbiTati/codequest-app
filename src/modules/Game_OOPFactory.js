@@ -189,7 +189,7 @@ export default function OOPFactoryGame() {
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
       <div style={{ animation: "fadeIn .4s", textAlign: "center" }}>
-        <div style={{ fontSize: 36, marginBottom: 8 }}>{score >= 130 ? "🏆" : score >= 90 ? "🏗️" : "🔧"}</div>
+        <div style={{ fontSize: 36, marginBottom: 8 }}>{score >= 130 ? "S" : score >= 90 ? "A" : "B"}</div>
         <div style={{ fontSize: 24, fontWeight: 800, color: C.gold }}>{score} points</div>
         <div style={{ fontSize: 13, color: C.muted, marginTop: 8 }}>
           {score >= 130 ? "L'usine tourne à plein régime !" : "Continuez à pratiquer !"}

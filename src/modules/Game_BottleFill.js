@@ -202,7 +202,7 @@ export default function BottleFillGame() {
   // RESULT
   if (screen === "result") {
     const grade = fillPct >= 90 ? "Potion parfaite !" : fillPct >= 70 ? "Bonne potion !" : fillPct >= 40 ? "Potion acceptable" : "Potion ratée...";
-    const emoji = fillPct >= 90 ? "🧪" : fillPct >= 70 ? "✨" : fillPct >= 40 ? "💧" : "💔";
+    const emoji = fillPct >= 90 ? "A+" : fillPct >= 70 ? "B" : fillPct >= 40 ? "C" : "F";
     return (
       <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>

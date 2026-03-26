@@ -361,7 +361,7 @@ export default function M01Unified() {
               <div style={{width:`${(Object.keys(completed).length/STEPS.length)*100}%`,height:"100%",background:`linear-gradient(90deg,${C.primary},${C.accent})`,borderRadius:2,transition:"width .5s"}}/>
             </div>
             <button onClick={()=>allDone&&setShowMemo(!showMemo)} style={{width:"100%",padding:"8px",borderRadius:8,border:`1px solid ${allDone?C.gold:C.border}`,background:allDone?C.gold+"15":"transparent",color:allDone?C.gold:C.dimmed,cursor:allDone?"pointer":"default",fontFamily:"inherit",fontSize:11,fontWeight:600,opacity:allDone?1:0.5}}>
-              {allDone?"📋 Voir le Mémo":"🔒 Mémo (terminez tout)"}
+              {allDone?"Voir le Memo":"Memo (verrouillee)"}
             </button>
           </div>
         </div>

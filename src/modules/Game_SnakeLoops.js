@@ -194,7 +194,7 @@ export default function SnakeLoopGame() {
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
       <div style={{ animation: "fadeIn .4s", textAlign: "center", maxWidth: 520 }}>
-        <div style={{ fontSize: 36, marginBottom: 8 }}>{score >= 120 ? "🏆" : score >= 80 ? "🎯" : "🐍"}</div>
+        <div style={{ fontSize: 36, marginBottom: 8 }}>{score >= 120 ? "S" : score >= 80 ? "A" : "B"}</div>
         <div style={{ fontSize: 24, fontWeight: 800, color: C.gold }}>{score} / 150 points</div>
         <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 4 }}>
           {results.map((r, i) => (

@@ -198,7 +198,7 @@ export default function MazeGame() {
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
       <div style={{ animation: "fadeIn .4s", textAlign: "center" }}>
-        <div style={{ fontSize: 40, marginBottom: 8 }}>{screen === "win" ? "🏆" : "💀"}</div>
+        <div style={{ fontSize: 40, marginBottom: 8 }}>{screen === "win" ? "S" : "X"}</div>
         <div style={{ fontSize: 22, fontWeight: 800, color: screen === "win" ? C.gold : C.danger }}>
           {screen === "win" ? "Labyrinthe traversé !" : "Perdu !"}
         </div>
