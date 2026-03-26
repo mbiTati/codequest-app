@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy, MessageSquare } from 'lucide-react';
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 import { AuthProvider, useAuth } from './lib/AuthProvider';
 import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 import StudentScorePage from './modules/StudentScorePage';
 import SettingsPage from './modules/SettingsPage';
-import { CommentButton } from './modules/CommentWidget';
+import CommentSection from './modules/CommentSection';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -268,6 +268,7 @@ function AppInner() {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showScores, setShowScores] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const { C } = useTheme();
   const { user, student, loading, signOut } = useAuth();
 
@@ -331,6 +332,21 @@ function AppInner() {
     );
   }
 
+  // Comments page
+  if (showComments) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowComments(false)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>Commentaires</span>
+        </div>
+        <div style={{ maxWidth: 700, margin: "0 auto", padding: 20 }}>
+          <CommentSection />
+        </div>
+      </div>
+    );
+  }
+
   // Cohort selector
   if (!cohort) {
     return <CohortSelector onSelect={selectCohort} />;
@@ -354,7 +370,6 @@ function AppInner() {
             fontFamily: "inherit", fontSize: 12,
           }}>{"\u2190 Retour au portail"}</button>
           <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>{activeTitle}</span>
-          {mod && <CommentButton moduleCode={mod.id.toUpperCase().replace("M","M")} />}
         </div>
         <ActiveComponent />
         {mod && <ResourcesBar moduleId={mod.id} />}
@@ -377,6 +392,12 @@ function AppInner() {
             background: C.accent + "10", color: C.accent, cursor: "pointer",
             fontFamily: "inherit", fontSize: 10, fontWeight: 600,
           }}><Trophy size={12} /> Mon Profil</button>
+          <button onClick={() => setShowComments(true)} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.gold + "40",
+            background: C.gold + "10", color: C.gold, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10, fontWeight: 600,
+          }}><MessageSquare size={12} /> Aide</button>
           <button onClick={() => setShowSettings(true)} style={{
             display: "flex", alignItems: "center", gap: 4,
             padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.border,
