@@ -9,6 +9,7 @@ import StudentScorePage from './modules/StudentScorePage';
 import SettingsPage from './modules/SettingsPage';
 import { CommentButton } from './modules/CommentWidget';
 import JavaEditor from './modules/JavaEditor';
+import StudentHome from './modules/StudentHome';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -417,10 +418,8 @@ function AppInner() {
         </div>
       </div>
 
+      <StudentHome onOpenModule={(id) => setCurrentModule(id)} />
       <Portal onSelectModule={setCurrentModule} />
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px" }}>
-        <PortalResources />
-      </div>
       <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: "1px solid " + C.border, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
           padding: "4px 12px", borderRadius: 5, border: "1px solid " + C.border,
