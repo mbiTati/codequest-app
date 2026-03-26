@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from './lib/AuthProvider';
 import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 import StudentScorePage from './modules/StudentScorePage';
+import SettingsPage from './modules/SettingsPage';
+import { CommentButton } from './modules/CommentWidget';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -265,6 +267,7 @@ function AppInner() {
   const [cohort, setCohort] = useState(null);
   const [showDashboard, setShowDashboard] = useState(false);
   const [showScores, setShowScores] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const { C } = useTheme();
   const { user, student, loading, signOut } = useAuth();
 
@@ -315,6 +318,19 @@ function AppInner() {
     );
   }
 
+  // Settings page
+  if (showSettings) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowSettings(false)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>Parametres</span>
+        </div>
+        <SettingsPage />
+      </div>
+    );
+  }
+
   // Cohort selector
   if (!cohort) {
     return <CohortSelector onSelect={selectCohort} />;
@@ -338,6 +354,7 @@ function AppInner() {
             fontFamily: "inherit", fontSize: 12,
           }}>{"\u2190 Retour au portail"}</button>
           <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>{activeTitle}</span>
+          {mod && <CommentButton moduleCode={mod.id.toUpperCase().replace("M","M")} />}
         </div>
         <ActiveComponent />
         {mod && <ResourcesBar moduleId={mod.id} />}
@@ -360,6 +377,12 @@ function AppInner() {
             background: C.accent + "10", color: C.accent, cursor: "pointer",
             fontFamily: "inherit", fontSize: 10, fontWeight: 600,
           }}><Trophy size={12} /> Mon Profil</button>
+          <button onClick={() => setShowSettings(true)} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.border,
+            background: "transparent", color: C.muted, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10,
+          }}><Settings size={12} /></button>
           {isTeacher && (
             <button onClick={() => setShowDashboard(true)} style={{
               display: "flex", alignItems: "center", gap: 4,
