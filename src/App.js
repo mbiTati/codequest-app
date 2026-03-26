@@ -6,7 +6,8 @@ import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 import StudentScorePage from './modules/StudentScorePage';
 import SettingsPage from './modules/SettingsPage';
-import CommentSection from './modules/CommentSection';
+import { CommentButton } from './modules/CommentWidget';
+import JavaEditor from './modules/JavaEditor';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -341,7 +342,7 @@ function AppInner() {
           <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>Commentaires</span>
         </div>
         <div style={{ maxWidth: 700, margin: "0 auto", padding: 20 }}>
-          <CommentSection />
+          <CommentButton />
         </div>
       </div>
     );
@@ -370,8 +371,10 @@ function AppInner() {
             fontFamily: "inherit", fontSize: 12,
           }}>{"\u2190 Retour au portail"}</button>
           <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>{activeTitle}</span>
+          {mod && <CommentButton moduleCode={mod.id} />}
         </div>
         <ActiveComponent />
+        {mod && <JavaEditor moduleId={mod.id} />}
         {mod && <ResourcesBar moduleId={mod.id} />}
       </div>
     );
