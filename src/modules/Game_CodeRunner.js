@@ -17,6 +17,7 @@ const LEVELS = [
     challenge: "Declare une variable 'vitesse' de type int avec la valeur 10",
     answer: "int vitesse = 10;",
     accepts: ["int vitesse = 10;","int vitesse=10;"],
+    regex: /int\s+vitesse\s*=\s*10\s*;?/i,
     obstacle: "barrier", hint: "int nomVariable = valeur;",
   },
   {
@@ -25,6 +26,7 @@ const LEVELS = [
     challenge: "Ecris la condition : si vitesse >= 10, le coureur saute",
     answer: "if (vitesse >= 10) {",
     accepts: ["if (vitesse >= 10) {","if(vitesse >= 10){","if (vitesse>=10) {","if(vitesse>=10){"],
+    regex: /if\s*\(\s*vitesse\s*>=\s*10\s*\)\s*\{?/i,
     obstacle: "wall", hint: "if (condition) {",
   },
   {
@@ -33,6 +35,7 @@ const LEVELS = [
     challenge: "Ecris une boucle for qui va de 0 a 4 (5 pieces)",
     answer: "for (int i = 0; i < 5; i++) {",
     accepts: ["for (int i = 0; i < 5; i++) {","for(int i=0;i<5;i++){","for (int i = 0; i < 5; i++){"],
+    regex: /for\s*\(\s*int\s+\w+\s*=\s*0\s*;\s*\w+\s*<\s*5\s*;\s*\w+\+\+\s*\)\s*\{?/i,
     obstacle: "coins", hint: "for (int i = 0; i < N; i++) {",
   },
   {
@@ -41,6 +44,7 @@ const LEVELS = [
     challenge: "Declare la methode publique construirePont() qui retourne void",
     answer: "public void construirePont() {",
     accepts: ["public void construirePont() {","public void construirePont(){","void construirePont() {"],
+    regex: /(public\s+)?void\s+construirePont\s*\(\s*\)\s*\{?/i,
     obstacle: "bridge", hint: "public void nomMethode() {",
   },
   {
@@ -48,15 +52,17 @@ const LEVELS = [
     story: "Un boss apparait ! Cree un objet Guerrier pour le combattre.",
     challenge: "Ecris : new Guerrier(\"Heros\", 100)",
     answer: 'Guerrier g = new Guerrier("Heros", 100);',
-    accepts: ['Guerrier g = new Guerrier("Heros", 100);','Guerrier g=new Guerrier("Heros",100);','Guerrier g = new Guerrier("Heros", 100) ;'],
-    obstacle: "boss", hint: 'Type nom = new Type(args);',
+    accepts: ["guerrier"],
+    regex: /guerrier\s+\w+\s*=\s*new\s+guerrier\s*\(\s*"heros"\s*,\s*100\s*\)/i,
+    obstacle: "boss", hint: 'Type nom = new Type("param", valeur);  — le nom de variable est libre !',
   },
   {
     id: 6, title: "Le Turbo", theme: "heritage", emoji: "⚡",
     story: "Derniere ligne droite ! Active le turbo avec l'heritage.",
     challenge: "Ecris : class Turbo extends Coureur {",
     answer: "class Turbo extends Coureur {",
-    accepts: ["class Turbo extends Coureur {","class Turbo extends Coureur{","public class Turbo extends Coureur {"],
+    accepts: ["class Turbo extends Coureur {","class Turbo extends Coureur{","public class Turbo extends Coureur {","public class Turbo extends Coureur{"],
+    regex: /(public\s+)?class\s+turbo\s+extends\s+coureur\s*\{?/i,
     obstacle: "turbo", hint: "class Enfant extends Parent {",
   },
 ];
@@ -141,7 +147,14 @@ export default function Game_CodeRunner() {
   function checkAnswer() {
     if (!current) return;
     const trimmed = input.trim();
-    const correct = current.accepts.some(a => trimmed.replace(/\s+/g, ' ').toLowerCase() === a.replace(/\s+/g, ' ').toLowerCase());
+    // Try regex first (more flexible), then exact match
+    let correct = false;
+    if (current.regex) {
+      correct = current.regex.test(trimmed);
+    }
+    if (!correct) {
+      correct = current.accepts.some(a => trimmed.replace(/\s+/g, ' ').toLowerCase() === a.replace(/\s+/g, ' ').toLowerCase());
+    }
 
     if (correct) {
       setFeedback({ ok: true });

@@ -271,9 +271,12 @@ export default function Game_CodeStudio() {
     const trimmed = input.trim().replace(/\s+/g, ' ');
     const expected = ch.code.replace(/\s+/g, ' ').replace(/\n/g, ' ');
     // Lenient matching
-    const match = trimmed.toLowerCase().includes(expected.split('\n')[0].replace(/\s+/g, ' ').toLowerCase().slice(0, 20));
+    const keywords = expected.split('\n')[0].match(/\w+/g) || [];
+    const inputWords = trimmed.match(/\w+/g) || [];
+    const keyMatches = keywords.filter(k => inputWords.some(w => w.toLowerCase() === k.toLowerCase())).length;
+    const match = keyMatches >= Math.min(3, keywords.length) || trimmed.length > 8;
 
-    if (match || trimmed.length > 10) {
+    if (match) {
       setFeedback({ ok: true, msg: "Concept : " + ch.concept });
       setScore(s => s + 100);
       runActions(ch.actions).then(() => {

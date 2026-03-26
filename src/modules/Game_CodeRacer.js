@@ -298,9 +298,10 @@ export default function Game_CodeRacer() {
   function checkAnswer() {
     if (!currentChallenge) return;
     const trimmed = input.trim();
-    const correct = currentChallenge.accepts.some(a =>
-      trimmed.replace(/\s+/g, ' ').toLowerCase() === a.replace(/\s+/g, ' ').toLowerCase()
-    );
+    const correct = currentChallenge.accepts.some(a => {
+      const norm = s => s.replace(/\s+/g, '').toLowerCase().replace(/;$/,'');
+      return norm(trimmed) === norm(a) || trimmed.replace(/\s+/g,' ').toLowerCase().includes(a.replace(/\s+/g,' ').toLowerCase().slice(0,15));
+    });
 
     if (correct) {
       setFeedback({ ok: true, msg: currentChallenge.partLabel || currentChallenge.abilityLabel || currentChallenge.upgradeLabel || "Correct !" });
