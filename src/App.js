@@ -48,6 +48,7 @@ import GameCodeRacer from './modules/Game_CodeRacer';
 import BlockAnimations from './modules/BlockAnimations';
 import CoursPage from './modules/CoursPage';
 import GameCodeRunner from './modules/Game_CodeRunner';
+import { Game_StackQueue, Game_EventCatcher, Game_CodeCleaner, Game_AlgoToCode, Game_ScopeAnimation, Game_StylePolice } from './modules/Game_NewGames';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -57,29 +58,33 @@ const C = {
 };
 
 const MODULES = [
-  { id: "m00", title: "M00 — Fondamentaux", desc: "Pipeline, Stacks/Queues, Events, IDE", phase: 0, component: M00, ready: true, Icon: Settings },
+  // LO1 — Algorithmes & Processus
+  { id: "m00", title: "M00 — Fondamentaux", desc: "Algorithmes, pipeline, compilation", phase: 0, component: M00, ready: true, Icon: Settings },
+  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, compilation, deploiement", phase: 0, component: M08, ready: true, Icon: Package },
+  // LO2 — Paradigmes & Concepts
   { id: "m15", title: "M15 — Variables & Types", desc: "int, double, String, boolean, final, Scanner", phase: 1, component: M15, ready: true, Icon: Variable },
   { id: "m01", title: "M01 — Conditions", desc: "if/else, switch, &&, ||", phase: 1, component: M01, ready: true, Icon: Zap },
   { id: "m02", title: "M02 — Boucles", desc: "for, while, break, continue", phase: 1, component: M02, ready: true, Icon: Repeat },
   { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true, Icon: Box },
-  { id: "m04", title: "M04 — Data", desc: "String, ArrayList, CRUD", phase: 1, component: M04, ready: true, Icon: Database },
-  { id: "m05", title: "M05 — Héritage", desc: "extends, super, protected, polymorphisme", phase: 2, component: M05, ready: true, Icon: GitBranch },
-  { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 2, component: M14, ready: true, Icon: Layout },
+  { id: "m04", title: "M04 — Data", desc: "String, ArrayList, structures de donnees", phase: 1, component: M04, ready: true, Icon: Database },
+  { id: "m05", title: "M05 — Heritage", desc: "extends, super, protected, polymorphisme", phase: 1, component: M05, ready: true, Icon: GitBranch },
+  { id: "m14", title: "M14 — Swing & Events", desc: "Interfaces graphiques, ActionListener", phase: 1, component: M14, ready: true, Icon: Layout },
+  // LO3 — Implementation
   { id: "m06", title: "M06 — Projet Git", desc: "Git, sprints, code reviews", phase: 2, component: M06, ready: true, Icon: Code },
-  { id: "m07", title: "M07 — Sécurité", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true, Icon: Shield },
-  { id: "m08", title: "M08 — Build & Deploy", desc: "JAR, compilation, deploiement", phase: 2, component: M08, ready: true, Icon: Package },
+  { id: "m07", title: "M07 — Securite", desc: "Validation, exceptions, null", phase: 2, component: M07, ready: true, Icon: Shield },
+  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/ecriture", phase: 2, component: M12, ready: true, Icon: FileText },
+  { id: "m13", title: "M13 — Base de donnees", desc: "JDBC, MySQL, CSV", phase: 2, component: M13, ready: true, Icon: HardDrive },
+  // LO4 — Debugging & Standards
   { id: "m09", title: "M09 — Debugging", desc: "Breakpoints, watch, tracing", phase: 3, component: M09, ready: true, Icon: Bug },
   { id: "m10", title: "M10 — Standards", desc: "Conventions, Javadoc", phase: 3, component: M10, ready: true, Icon: CheckSquare },
   { id: "m11", title: "M11 — Escape Room", desc: "Chasse aux bugs", phase: 3, component: M11, ready: true, Icon: Puzzle },
-  { id: "m12", title: "M12 — Fichiers & Crypto", desc: "SHA, lecture/écriture", phase: 3, component: M12, ready: true, Icon: FileText },
-  { id: "m13", title: "M13 — Base de données", desc: "JDBC, MySQL, CSV", phase: 3, component: M13, ready: true, Icon: HardDrive },
 ];
 
 const PHASES = [
-  { id: 0, title: "Phase 0 — Essential Content", subtitle: "Gaps BTEC obligatoires", color: C.gold },
-  { id: 1, title: "Phase 1 — Rattrapage", subtitle: "Les fondamentaux Java", color: C.accent },
-  { id: 2, title: "Phase 2 — LO3 Implémentation", subtitle: "Construire un vrai projet", color: "#7C3AED" },
-  { id: 3, title: "Phase 3 — LO4 Debugging", subtitle: "Qualité et standards", color: C.danger },
+  { id: 0, title: "LO1 — Algorithmes & Processus", subtitle: "Definir des algorithmes, comprendre le pipeline", color: C.gold, lo: "LO1" },
+  { id: 1, title: "LO2 — Paradigmes & Concepts", subtitle: "Procedural, OOP, event-driven, structures de donnees", color: C.accent, lo: "LO2" },
+  { id: 2, title: "LO3 — Implementation", subtitle: "Coder avec un IDE, securite, deploiement", color: "#7C3AED", lo: "LO3" },
+  { id: 3, title: "LO4 — Debugging & Standards", subtitle: "Debugger, standards de codage, qualite", color: C.danger, lo: "LO4" },
 ];
 
 const GAMES = [
@@ -98,6 +103,12 @@ const GAMES = [
   { id: "g-racer", title: "Code Racer", desc: "Construis ta voiture en Java, fais-la courir !", Icon: Zap, component: GameCodeRacer, module: "M03/M05" },
   { id: "g-blocks", title: "Block Animations", desc: "Visualisez boucles, conditions, constructeurs en blocs", Icon: Box, component: BlockAnimations, module: "Tous" },
   { id: "g-runner", title: "Code Runner", desc: "Fais courir ton personnage en ecrivant du Java !", Icon: Play, component: GameCodeRunner, module: "Tous" },
+  { id: "g-stack", title: "Stack & Queue", desc: "Empiler, depiler — LIFO vs FIFO", Icon: Database, component: Game_StackQueue, module: "LO2" },
+  { id: "g-events", title: "Event Catcher", desc: "Cliquez, survolez, tapez — declenchez les evenements Java", Icon: Zap, component: Game_EventCatcher, module: "LO2" },
+  { id: "g-cleaner", title: "Code Cleaner", desc: "Nettoyez du code sale en temps limite", Icon: CheckSquare, component: Game_CodeCleaner, module: "LO3" },
+  { id: "g-algo", title: "Algo → Code", desc: "Traduisez un flowchart en Java", Icon: GitBranch, component: Game_AlgoToCode, module: "LO1" },
+  { id: "g-scope", title: "Scope Animation", desc: "Voyez les variables apparaitre et disparaitre", Icon: Code, component: Game_ScopeAnimation, module: "LO2" },
+  { id: "g-style", title: "Style Police", desc: "Trouvez les violations de naming conventions", Icon: Shield, component: Game_StylePolice, module: "LO4" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
@@ -117,7 +128,7 @@ function Portal({ onSelectModule }) {
       <div style={{ padding: "24px 20px 16px", textAlign: "center", borderBottom: `1px solid ${C.border}` }}>
         <div style={{ fontSize: 11, letterSpacing: 3, color: C.dimmed, marginBottom: 4 }}>BTEC HND UNIT 1 · PROGRAMMING</div>
         <div style={{ fontSize: 28, fontWeight: 800, color: C.accent }}>CODEQUEST</div>
-        <div style={{ fontSize: 14, color: C.muted, marginTop: 4 }}>Le Labo de l'Inventeur — LO3 & LO4</div>
+        <div style={{ fontSize: 14, color: C.muted, marginTop: 4 }}>Le Labo de l'Inventeur — Unit 1 Programming</div>
       </div>
 
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px 16px" }}>
