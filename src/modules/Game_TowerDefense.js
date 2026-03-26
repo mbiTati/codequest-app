@@ -27,7 +27,7 @@ for(let y=3;y>=1;y--)PATH.push({x:3,y});
 for(let x=3;x<7;x++)PATH.push({x,y:1});
 for(let y=1;y<=5;y++)PATH.push({x:7,y});
 for(let x=7;x>=4;x--)PATH.push({x,y:5});
-for(let y=5;y<=7;y--)PATH.push({x:4,y});
+for(let y=5;y<=7;y++)PATH.push({x:4,y});
 for(let x=4;x<GRID_W;x++)PATH.push({x,y:7});
 
 export default function GameTowerDefense(){
