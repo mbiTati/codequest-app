@@ -8,6 +8,7 @@ const C = {
   primary:"#0D7377",success:"#10B981",dimmed:"#64748b",secondary:"#14A3C7",
 };
 const TEACHER_EMAILS = ['tati.b@hotmail.fr'];
+// Also check role from student profile
 
 const LEVELS = [
   {name:"Noob Master",min:0,color:"#64748b"},
@@ -59,7 +60,7 @@ export default function TeacherDashboard(){
     setGameScores(gR.data||[]);setComments(cR.data||[]);setLoading(false);
   }
 
-  const filtered=filterCohort==='all'?students.filter(s=>!TEACHER_EMAILS.includes(s.email)):students.filter(s=>s.cohort===filterCohort&&!TEACHER_EMAILS.includes(s.email));
+  const filtered=filterCohort==='all'?students.filter(s=>s.role!=='teacher'):students.filter(s=>s.cohort===filterCohort&&s.role!=='teacher');
   const filteredIds=new Set(filtered.map(s=>s.id));
   const filteredProgress=progress.filter(p=>filteredIds.has(p.student_id));
 

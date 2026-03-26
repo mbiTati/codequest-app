@@ -294,7 +294,7 @@ function AppInner() {
   }
 
   // Teacher dashboard
-  const isTeacher = user && TEACHER_EMAILS.includes(user.email?.toLowerCase());
+  const isTeacher = student?.role === 'teacher' || (user && TEACHER_EMAILS.includes(user.email?.toLowerCase()));
   if (showDashboard && isTeacher) {
     return (
       <div>

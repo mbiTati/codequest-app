@@ -49,7 +49,7 @@ export default function StudentScorePage(){
       }
       // Leaderboard - try to load, fail gracefully
       try {
-        const lR = await supabase.from('cq_students').select('id,first_name,last_name,total_credits,current_level').order('total_credits',{ascending:false}).limit(20);
+        const lR = await supabase.from('cq_students').select('id,first_name,last_name,total_credits,current_level,role').neq('role','teacher').order('total_credits',{ascending:false}).limit(20);
         setLeaderboard(lR.data||[]);
       } catch(e){ setLeaderboard([]); }
     } catch(e){
@@ -84,6 +84,7 @@ export default function StudentScorePage(){
 
   if(loading)return<div style={{minHeight:"100vh",background:C.bg,color:C.muted,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Segoe UI',sans-serif"}}>Chargement...</div>;
 
+  const isTeacher = student?.role === 'teacher';
   const name = student ? student.first_name+" "+student.last_name : (user?.email || "Etudiant");
   const totalCredits = progress.length > 0 ? progress.reduce((a,p)=>a+(p.credits_earned||0),0) : localCredits;
   const totalQ = progress.reduce((a,p)=>a+(p.total_questions||0),0);
@@ -117,14 +118,14 @@ export default function StudentScorePage(){
         <div style={{textAlign:"center",marginBottom:24}}>
           <div className="level-badge" style={{
             width:100,height:100,borderRadius:"50%",margin:"0 auto 12px",
-            background:currentLevel.color+"20",border:"3px solid "+currentLevel.color,
+            background:isTeacher?"#F59E0B20":currentLevel.color+"20",border:"3px solid "+(isTeacher?"#F59E0B":currentLevel.color),
             display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
           }}>
-            <div style={{fontSize:24,fontWeight:800,color:currentLevel.color}}>{currentLevel.icon}</div>
-            <div style={{fontSize:8,color:currentLevel.color,fontWeight:600,marginTop:2}}>{"Niv."+(levelIdx+1)}</div>
+            <div style={{fontSize:24,fontWeight:800,color:isTeacher?"#F59E0B":currentLevel.color}}>{isTeacher?"PROF":currentLevel.icon}</div>
+            {!isTeacher&&<div style={{fontSize:8,color:currentLevel.color,fontWeight:600,marginTop:2}}>{"Niv."+(levelIdx+1)}</div>}
           </div>
           <div style={{fontSize:20,fontWeight:700,color:C.text}}>{name}</div>
-          <div style={{fontSize:16,fontWeight:700,color:currentLevel.color,marginTop:4}}>{currentLevel.name}</div>
+          <div style={{fontSize:16,fontWeight:700,color:isTeacher?"#F59E0B":currentLevel.color,marginTop:4}}>{isTeacher?"Professeur":currentLevel.name}</div>
 
           {/* XP Bar */}
           <div style={{maxWidth:400,margin:"12px auto 0"}}>
