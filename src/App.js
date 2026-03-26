@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart, Trophy } from 'lucide-react';
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 import { AuthProvider, useAuth } from './lib/AuthProvider';
 import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
+import StudentScorePage from './modules/StudentScorePage';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -263,6 +264,7 @@ function AppInner() {
   const [currentModule, setCurrentModule] = useState(null);
   const [cohort, setCohort] = useState(null);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showScores, setShowScores] = useState(false);
   const { C } = useTheme();
   const { user, student, loading, signOut } = useAuth();
 
@@ -296,6 +298,19 @@ function AppInner() {
           <span style={{ fontSize: 12, color: C.gold, fontWeight: 600 }}>Dashboard Enseignant</span>
         </div>
         <TeacherDashboard />
+      </div>
+    );
+  }
+
+  // Student Scores page
+  if (showScores) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowScores(false)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.gold, fontWeight: 600 }}>Mon Profil</span>
+        </div>
+        <StudentScorePage />
       </div>
     );
   }
@@ -339,6 +354,12 @@ function AppInner() {
           {student && <span style={{ marginLeft: 6, padding: "1px 6px", borderRadius: 4, background: C.primary + "20", color: C.accent, fontSize: 9 }}>{student.cohort}</span>}
         </span>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button onClick={() => setShowScores(true)} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.accent + "40",
+            background: C.accent + "10", color: C.accent, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10, fontWeight: 600,
+          }}><Trophy size={12} /> Mon Profil</button>
           {isTeacher && (
             <button onClick={() => setShowDashboard(true)} style={{
               display: "flex", alignItems: "center", gap: 4,
