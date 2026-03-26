@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable } from 'lucide-react';
+import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -100,6 +101,7 @@ if (!window.sendPrompt) {
 
 function Portal({ onSelectModule }) {
   const [expanded, setExpanded] = useState(null);
+  const { C } = useTheme();
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text }}>
@@ -217,6 +219,7 @@ function Portal({ onSelectModule }) {
 }
 
 function CohortSelector({ onSelect }) {
+  const { C } = useTheme();
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Segoe UI',system-ui,sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ fontSize: 11, letterSpacing: 4, color: C.dimmed, marginBottom: 8 }}>BTEC HND UNIT 1 · PROGRAMMING</div>
@@ -253,9 +256,10 @@ function CohortSelector({ onSelect }) {
   );
 }
 
-export default function App() {
+function AppInner() {
   const [currentModule, setCurrentModule] = useState(null);
   const [cohort, setCohort] = useState(null);
+  const { C } = useTheme();
 
   useEffect(() => {
     const saved = localStorage.getItem("cq-cohort");
@@ -310,13 +314,18 @@ export default function App() {
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px" }}>
         <PortalResources />
       </div>
-      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}` }}>
+      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}`, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
           padding: "4px 12px", borderRadius: 5, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dimmed, cursor: "pointer",
           fontFamily: "'Segoe UI',sans-serif", fontSize: 10,
         }}>{"Changer de cohorte (" + (cohort === "2025" ? "2025-2026" : "2026-2027") + ")"}</button>
+        <ThemeToggle />
       </div>
     </div>
   );
+}
+
+export default function App() {
+  return <ThemeProvider><AppInner /></ThemeProvider>;
 }
