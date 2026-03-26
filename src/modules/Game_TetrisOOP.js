@@ -113,10 +113,11 @@ export default function GameTetrisOOP() {
     return ()=>window.removeEventListener("keydown",handle);
   },[piece,pos,board,gameOver,question]);
 
+  const [feedback, setFeedback] = useState(null);
   const answerQ=(idx)=>{
-    if(idx===question.correct){setScore(s=>s+50);}
+    const ok = idx===question.correct;
+    if(ok){setScore(s=>s+50);}
     else{
-      // Add garbage line
       const nb=board.map(r=>[...r]);
       nb.shift();
       const garbage=Array(COLS).fill(C.danger+"80");
@@ -124,7 +125,8 @@ export default function GameTetrisOOP() {
       nb.push(garbage);
       setBoard(nb);
     }
-    setQuestion(null);
+    setFeedback(ok ? "Correct ! +50 pts" : "Incorrect ! Ligne de garbage");
+    setTimeout(() => { setFeedback(null); setQuestion(null); }, 1200);
   };
 
   const restart=()=>{
@@ -152,13 +154,10 @@ export default function GameTetrisOOP() {
 
   return(
     <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'Segoe UI',system-ui,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:10}}>
-        <span style={{fontSize:11,letterSpacing:2,color:C.muted}}>CODEQUEST</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:14,fontWeight:700,color:"#7C3AED"}}>Tetris OOP</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:12,color:C.gold,fontWeight:700}}>Score: {score}</span>
-        <span style={{fontSize:11,color:C.muted}}>Lignes: {lines} | Niv: {level}</span>
+      <div style={{padding:"6px 16px",background:"#111827",borderBottom:"1px solid #1e293b",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <button onClick={()=>window.history.length>1?window.history.back():window.location.reload()} style={{display:"flex",alignItems:"center",gap:4,padding:"5px 12px",borderRadius:7,border:"1px solid #1e293b",background:"transparent",color:"#94a3b8",cursor:"pointer",fontFamily:"inherit",fontSize:11}}>{"\u2190 Retour"}</button>
+        <span style={{fontSize:13,fontWeight:700,color:"#7C3AED"}}>Tetris OOP</span>
+        <span style={{fontSize:11,color:"#F59E0B",fontWeight:700}}>{"Score: "+score+" | Lignes: "+lines+" | Niv: "+level}</span>
       </div>
       <div style={{display:"flex",gap:16}}>
         <div style={{position:"relative",width:COLS*CELL,height:ROWS*CELL,background:C.card,borderRadius:8,border:"1px solid "+C.border,overflow:"hidden"}}>
@@ -167,6 +166,7 @@ export default function GameTetrisOOP() {
           {question&&<div style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",background:"rgba(10,15,26,0.93)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:12}}>
             <div style={{fontSize:12,fontWeight:700,color:C.accent,marginBottom:10,textAlign:"center"}}>{question.q}</div>
             {question.opts.map((o,i)=><button key={i} onClick={()=>answerQ(i)} style={{display:"block",width:"90%",padding:"8px",marginBottom:4,borderRadius:6,border:"1px solid "+C.border,background:C.card,color:C.text,cursor:"pointer",fontFamily:"inherit",fontSize:11,textAlign:"left"}}>{String.fromCharCode(65+i)+". "+o}</button>)}
+            {feedback&&<div style={{marginTop:8,padding:"6px 12px",borderRadius:6,fontSize:11,fontWeight:700,background:feedback.includes("Correct")?"#10B98120":"#EF444420",color:feedback.includes("Correct")?"#10B981":"#EF4444"}}>{feedback}</div>}
           </div>}
           {gameOver&&<div style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",background:"rgba(10,15,26,0.93)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
             <div style={{fontSize:20,fontWeight:700,color:C.danger}}>Game Over</div>

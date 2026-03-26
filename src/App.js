@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable } from 'lucide-react';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -17,6 +17,7 @@ import M11 from './modules/M11_Unified_EscapeRoom';
 import M12 from './modules/M12_Unified_Fichiers';
 import M13 from './modules/M13_Unified_BDD';
 import M14 from './modules/M14_Unified_Swing';
+import M15 from './modules/M15_Unified_Variables';
 
 // Import standalone visual games
 import GameBubbleSort from './modules/Game_BubbleSort';
@@ -38,6 +39,7 @@ const C = {
 
 const MODULES = [
   { id: "m00", title: "M00 — Fondamentaux", desc: "Pipeline, Stacks/Queues, Events, IDE", phase: 0, component: M00, ready: true, Icon: Settings },
+  { id: "m15", title: "M15 — Variables & Types", desc: "int, double, String, boolean, final, Scanner", phase: 1, component: M15, ready: true, Icon: Variable },
   { id: "m01", title: "M01 — Conditions", desc: "if/else, switch, &&, ||", phase: 1, component: M01, ready: true, Icon: Zap },
   { id: "m02", title: "M02 — Boucles", desc: "for, while, break, continue", phase: 1, component: M02, ready: true, Icon: Repeat },
   { id: "m03", title: "M03 — POO", desc: "Classes, constructeur, getter/setter", phase: 1, component: M03, ready: true, Icon: Box },

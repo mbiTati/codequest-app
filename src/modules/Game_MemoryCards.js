@@ -73,6 +73,7 @@ export default function GameMemoryCards(){
   if (!started) {
     return (
       <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'Segoe UI',system-ui,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24}}>
+        <button onClick={()=>window.history.length>1?window.history.back():window.location.reload()} style={{position:"absolute",top:16,left:16,display:"flex",alignItems:"center",gap:4,padding:"5px 12px",borderRadius:7,border:"1px solid #1e293b",background:"transparent",color:"#94a3b8",cursor:"pointer",fontFamily:"inherit",fontSize:11}}>{"\u2190 Retour"}</button>
         <div style={{fontSize:11,letterSpacing:2,color:C.muted,marginBottom:6}}>CODEQUEST</div>
         <div style={{fontSize:24,fontWeight:700,color:C.gold,marginBottom:20}}>Memory Java</div>
         <div style={{fontSize:13,color:C.muted,marginBottom:20}}>Associez chaque concept Java a sa definition</div>
@@ -93,14 +94,10 @@ export default function GameMemoryCards(){
 
   return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'Segoe UI',system-ui,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:12}}>
-        <span style={{fontSize:11,letterSpacing:2,color:C.muted}}>CODEQUEST</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:14,fontWeight:700,color:C.gold}}>Memory Java</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:12,color:C.muted}}>Coups: {moves}</span>
-        <span style={{fontSize:12,color:C.muted}}>{mm}:{ss.toString().padStart(2,"0")}</span>
-        {combo>1&&<span style={{fontSize:11,color:C.accent,fontWeight:700}}>Combo x{combo}</span>}
+      <div style={{padding:"6px 16px",background:"#111827",borderBottom:"1px solid #1e293b",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,borderRadius:8}}>
+        <button onClick={()=>setStarted(false)} style={{display:"flex",alignItems:"center",gap:4,padding:"5px 12px",borderRadius:7,border:"1px solid #1e293b",background:"transparent",color:"#94a3b8",cursor:"pointer",fontFamily:"inherit",fontSize:11}}>{"\u2190 Retour"}</button>
+        <span style={{fontSize:13,fontWeight:700,color:C.gold}}>Memory Java</span>
+        <span style={{fontSize:11,color:C.muted}}>{"Paires: "+matched.length/2+"/"+cards.length/2+" | "+mm+":"+ss.toString().padStart(2,"0")}{combo>1?" | Combo x"+combo:""}</span>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:`repeat(${gridCols}, 1fr)`,gap:8,maxWidth:560}}>

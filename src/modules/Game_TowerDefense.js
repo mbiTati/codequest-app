@@ -191,15 +191,10 @@ export default function GameTowerDefense(){
 
   return(
     <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'Segoe UI',system-ui,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:12}}>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8,flexWrap:"wrap"}}>
-        <span style={{fontSize:11,letterSpacing:2,color:C.muted}}>CODEQUEST</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:13,fontWeight:700,color:C.danger}}>Tower Defense</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:11,color:C.gold}}>Argent: {money}</span>
-        <span style={{fontSize:11,color:C.danger}}>Vies: {lives}</span>
-        <span style={{fontSize:11,color:C.accent}}>Vague: {wave}/8</span>
-        <span style={{fontSize:11,color:C.success}}>Kills: {totalKills}</span>
+      <div style={{padding:"6px 16px",background:"#111827",borderBottom:"1px solid #1e293b",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <button onClick={()=>window.history.length>1?window.history.back():window.location.reload()} style={{display:"flex",alignItems:"center",gap:4,padding:"5px 12px",borderRadius:7,border:"1px solid #1e293b",background:"transparent",color:"#94a3b8",cursor:"pointer",fontFamily:"inherit",fontSize:11}}>{"\u2190 Retour"}</button>
+        <span style={{fontSize:13,fontWeight:700,color:"#EF4444"}}>Tower Defense</span>
+        <span style={{fontSize:11,color:"#F59E0B",fontWeight:700}}>{"Vague "+wave+"/8 | Vies: "+lives+" | Argent: "+money}</span>
       </div>
 
       <div style={{display:"flex",gap:12}}>

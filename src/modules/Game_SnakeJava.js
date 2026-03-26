@@ -101,10 +101,13 @@ export default function GameSnakeJava() {
     ctx.fillText("?",food.x*CELL+CELL/2,food.y*CELL+CELL/2+1);
   }, [snake, food]);
 
+  const [feedback, setFeedback] = useState(null);
   const answerQ = (idx) => {
-    if (idx === question.correct) { setScore(s=>s+10); }
+    const ok = idx === question.correct;
+    if (ok) { setScore(s=>s+10); }
     else { setSnake(s => s.length > 2 ? s.slice(0,-1) : s); }
-    setQuestion(null); setPaused(false);
+    setFeedback(ok ? "Correct ! +10 pts" : "Incorrect ! Le serpent retrecit");
+    setTimeout(() => { setFeedback(null); setQuestion(null); setPaused(false); }, 1200);
   };
 
   const restart = () => {
@@ -115,13 +118,10 @@ export default function GameSnakeJava() {
 
   return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:"'Segoe UI',system-ui,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:10}}>
-        <span style={{fontSize:11,letterSpacing:2,color:C.muted}}>CODEQUEST</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:14,fontWeight:700,color:C.accent}}>Snake Java</span>
-        <span style={{color:C.border}}>|</span>
-        <span style={{fontSize:12,color:C.gold,fontWeight:700}}>Score: {score}</span>
-        <span style={{fontSize:12,color:C.muted}}>Taille: {snake.length}</span>
+      <div style={{padding:"6px 16px",background:"#111827",borderBottom:"1px solid #1e293b",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <button onClick={()=>window.history.length>1?window.history.back():window.location.reload()} style={{display:"flex",alignItems:"center",gap:4,padding:"5px 12px",borderRadius:7,border:"1px solid #1e293b",background:"transparent",color:"#94a3b8",cursor:"pointer",fontFamily:"inherit",fontSize:11}}>{"\u2190 Retour"}</button>
+        <span style={{fontSize:13,fontWeight:700,color:"#32E0C4"}}>Snake Java</span>
+        <span style={{fontSize:11,color:"#F59E0B",fontWeight:700}}>{"Score: "+score+" | Q"+qIdx+"/"+QUESTIONS.length}</span>
       </div>
 
       <div style={{position:"relative"}}>
@@ -137,6 +137,7 @@ export default function GameSnakeJava() {
                 color:C.text,cursor:"pointer",fontFamily:"inherit",fontSize:13,textAlign:"left",
               }}>{String.fromCharCode(65+i)+". "+o}</button>
             ))}
+            {feedback && <div style={{marginTop:10,padding:"8px 16px",borderRadius:8,fontSize:13,fontWeight:700,textAlign:"center",background:feedback.includes("Correct")?"#10B98120":"#EF444420",color:feedback.includes("Correct")?"#10B981":"#EF4444"}}>{feedback}</div>}
           </div>
         )}
 
