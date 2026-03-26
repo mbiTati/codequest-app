@@ -21,7 +21,7 @@ function LoopGame({onComplete}){
     {code:`int t=0;\nfor(int i=1;i<=4;i++) t+=i;\n// t=?`,q:"Valeur de t ?",opts:["4","10","6","15"],correct:1,trace:["i=1→t=1","i=2→t=3","i=3→t=6","i=4→t=10"]},
     {code:`int c=0;\nfor(int i=0;i<10;i++)\n  if(i%2==0) c++;\n// c=?`,q:"Valeur de c ?",opts:["4","5","10","6"],correct:1,trace:["0✓,2✓,4✓,6✓,8✓ → 5 pairs"]},
     {code:`int n=64; int s=0;\nwhile(n>1) {\n  n/=2; s++;\n}\n// s=?`,q:"Valeur de s ?",opts:["5","6","7","32"],correct:1,trace:["64→32→16→8→4→2→1 = 6 divisions"]},
-    {code:`int sum=0;\nfor(int i=0;i<8;i++){\n  if(i==3) continue;\n  if(i==6) break;\n  sum+=i;\n}\n// sum=?`,q:"Valeur de sum ?",opts:["15","12","10","21"],correct:2,trace:["0+1+2+(skip3)+4+5+(break6) = 12"]},
+    {code:`int sum=0;\nfor(int i=0;i<8;i++){\n  if(i==3) continue;\n  if(i==6) break;\n  sum+=i;\n}\n// sum=?`,q:"Valeur de sum ?",opts:["15","12","10","21"],correct:1,trace:["0+1+2+(skip3)+4+5+(break6) = 12"]},
     {code:`int c=0;\nfor(int i=0;i<3;i++)\n  for(int j=0;j<4;j++)\n    c++;\n// c=?`,q:"Valeur de c ?",opts:["7","12","9","16"],correct:1,trace:["3 tours × 4 tours = 12"]},
     {code:`String s="";\nfor(int i=3;i>=1;i--)\n  s+=i;\n// s=?`,q:'Valeur de s ?',opts:['"123"','"321"','"3"','"6"'],correct:1,trace:["i=3→'3', i=2→'32', i=1→'321'"]},
   ];
