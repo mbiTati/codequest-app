@@ -39,6 +39,9 @@ import GameSnakeJava from './modules/Game_SnakeJava';
 import GameTetrisOOP from './modules/Game_TetrisOOP';
 import GameMemoryCards from './modules/Game_MemoryCards';
 import GameTowerDefense from './modules/Game_TowerDefense';
+import GameDebuggingRace from './modules/Game_DebuggingRace';
+import GameCodeReader from './modules/Game_CodeReader';
+import GameUMLDragDrop from './modules/Game_UMLDragDrop';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -83,6 +86,9 @@ const GAMES = [
   { id: "g-tetris", title: "Tetris OOP", desc: "Chaque pièce = un concept OOP. Quiz toutes les 3 pièces", Icon: Box, component: GameTetrisOOP, module: "M03" },
   { id: "g-memory", title: "Memory Java", desc: "Associez concept et définition en retournant les cartes", Icon: BookOpen, component: GameMemoryCards, module: "Tous" },
   { id: "g-tower", title: "Tower Defense", desc: "Placez des tours (try-catch, validation) contre les bugs", Icon: Shield, component: GameTowerDefense, module: "M07" },
+  { id: "g-debug", title: "Debugging Race", desc: "Trouvez les bugs le plus vite possible !", Icon: Bug, component: GameDebuggingRace, module: "M09" },
+  { id: "g-reader", title: "Lecture de Code", desc: "Lisez le code, predisez la sortie — 9 defis", Icon: BookOpen, component: GameCodeReader, module: "LO1" },
+  { id: "g-uml", title: "UML Drag & Drop", desc: "Construisez des diagrammes de classes en glissant", Icon: Database, component: GameUMLDragDrop, module: "LO2" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
