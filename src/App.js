@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable } from 'lucide-react';
+import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug, CheckSquare, Puzzle, FileText, HardDrive, Layout, Zap, Beaker, Map, BarChart3, Gamepad2, Play, ChevronRight, Download, ExternalLink, Coffee, FlaskConical, Settings, Variable, LogOut, BarChart } from 'lucide-react';
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
+import { AuthProvider, useAuth } from './lib/AuthProvider';
+import LoginPage from './modules/LoginPage';
+import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 
 // Import all unified modules
 import M01 from './modules/M01_Unified_Conditions';
@@ -259,7 +262,9 @@ function CohortSelector({ onSelect }) {
 function AppInner() {
   const [currentModule, setCurrentModule] = useState(null);
   const [cohort, setCohort] = useState(null);
+  const [showDashboard, setShowDashboard] = useState(false);
   const { C } = useTheme();
+  const { user, student, loading, signOut } = useAuth();
 
   useEffect(() => {
     const saved = localStorage.getItem("cq-cohort");
@@ -271,7 +276,31 @@ function AppInner() {
     localStorage.setItem("cq-cohort", c);
   };
 
-  // Show cohort selector first
+  // Loading
+  if (loading) {
+    return <div style={{ minHeight: "100vh", background: C.bg, display: "flex", alignItems: "center", justifyContent: "center", color: C.muted, fontFamily: "'Segoe UI',sans-serif" }}>Chargement...</div>;
+  }
+
+  // Not logged in
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  // Teacher dashboard
+  const isTeacher = user && TEACHER_EMAILS.includes(user.email?.toLowerCase());
+  if (showDashboard && isTeacher) {
+    return (
+      <div>
+        <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => setShowDashboard(false)} style={{ padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border, background: "transparent", color: C.muted, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: C.gold, fontWeight: 600 }}>Dashboard Enseignant</span>
+        </div>
+        <TeacherDashboard />
+      </div>
+    );
+  }
+
+  // Cohort selector
   if (!cohort) {
     return <CohortSelector onSelect={selectCohort} />;
   }
@@ -285,22 +314,15 @@ function AppInner() {
     return (
       <div>
         <div style={{
-          padding: "6px 16px", background: C.card, borderBottom: `1px solid ${C.border}`,
+          padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border,
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
-          <button
-            onClick={() => setCurrentModule(null)}
-            style={{
-              padding: "5px 14px", borderRadius: 7, border: `1px solid ${C.border}`,
-              background: "transparent", color: C.muted, cursor: "pointer",
-              fontFamily: "inherit", fontSize: 12,
-            }}
-          >
-            {"\u2190 Retour au portail"}
-          </button>
-          <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>
-            {activeTitle}
-          </span>
+          <button onClick={() => setCurrentModule(null)} style={{
+            padding: "5px 14px", borderRadius: 7, border: "1px solid " + C.border,
+            background: "transparent", color: C.muted, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 12,
+          }}>{"\u2190 Retour au portail"}</button>
+          <span style={{ fontSize: 12, color: game ? C.gold : C.accent, fontWeight: 600 }}>{activeTitle}</span>
         </div>
         <ActiveComponent />
         {mod && <ResourcesBar moduleId={mod.id} />}
@@ -310,13 +332,37 @@ function AppInner() {
 
   return (
     <div>
+      {/* User bar */}
+      <div style={{ padding: "6px 16px", background: C.card, borderBottom: "1px solid " + C.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ fontSize: 11, color: C.muted }}>
+          {student ? student.first_name + " " + student.last_name : user.email}
+          {student && <span style={{ marginLeft: 6, padding: "1px 6px", borderRadius: 4, background: C.primary + "20", color: C.accent, fontSize: 9 }}>{student.cohort}</span>}
+        </span>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {isTeacher && (
+            <button onClick={() => setShowDashboard(true)} style={{
+              display: "flex", alignItems: "center", gap: 4,
+              padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.gold + "40",
+              background: C.gold + "10", color: C.gold, cursor: "pointer",
+              fontFamily: "inherit", fontSize: 10, fontWeight: 600,
+            }}><BarChart size={12} /> Dashboard</button>
+          )}
+          <button onClick={signOut} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.border,
+            background: "transparent", color: C.dimmed, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10,
+          }}><LogOut size={12} /> Deconnexion</button>
+        </div>
+      </div>
+
       <Portal onSelectModule={setCurrentModule} />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px" }}>
         <PortalResources />
       </div>
-      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: `1px solid ${C.border}`, display: "flex", justifyContent: "center", gap: 12 }}>
+      <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: "1px solid " + C.border, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
-          padding: "4px 12px", borderRadius: 5, border: `1px solid ${C.border}`,
+          padding: "4px 12px", borderRadius: 5, border: "1px solid " + C.border,
           background: "transparent", color: C.dimmed, cursor: "pointer",
           fontFamily: "'Segoe UI',sans-serif", fontSize: 10,
         }}>{"Changer de cohorte (" + (cohort === "2025" ? "2025-2026" : "2026-2027") + ")"}</button>
@@ -327,5 +373,5 @@ function AppInner() {
 }
 
 export default function App() {
-  return <ThemeProvider><AppInner /></ThemeProvider>;
+  return <ThemeProvider><AuthProvider><AppInner /></AuthProvider></ThemeProvider>;
 }
