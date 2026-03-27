@@ -451,6 +451,12 @@ function AppInner() {
             background: C.gold + "10", color: C.gold, cursor: "pointer",
             fontFamily: "inherit", fontSize: 10, fontWeight: 600,
           }}><MessageSquare size={12} /> Aide</button>
+          <button onClick={() => setShowCours(true)} style={{
+            display: "flex", alignItems: "center", gap: 4,
+            padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.primary + "40",
+            background: C.primary + "10", color: C.primary, cursor: "pointer",
+            fontFamily: "inherit", fontSize: 10, fontWeight: 600,
+          }}><BookOpen size={12} /> Cours</button>
           <button onClick={() => setShowQuizLive(isTeacher ? 'host' : 'player')} style={{
             display: "flex", alignItems: "center", gap: 4,
             padding: "4px 10px", borderRadius: 5, border: "1px solid " + C.danger + "40",

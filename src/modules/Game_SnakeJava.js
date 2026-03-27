@@ -27,7 +27,7 @@ export default function GameSnakeJava() {
   const [paused, setPaused] = useState(false);
   const [question, setQuestion] = useState(null);
   const [qIdx, setQIdx] = useState(0);
-  const [speed] = useState(150);
+  const [speed] = useState(400);
   const dirRef = useRef(dir);
   const snakeRef = useRef(snake);
 
