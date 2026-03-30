@@ -126,11 +126,7 @@ export default function TeacherDashboard(){
         {/* Header */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
           <div><div style={{fontSize:10,letterSpacing:3,color:C.dimmed}}>ECOLE SCHULZ</div><div style={{fontSize:18,fontWeight:700,color:C.accent}}>Dashboard Enseignant</div></div>
-          <div style={{display:"flex",gap:6}}>
-            <select value={filterClass} onChange={e=>setFilterClass(e.target.value)} style={{...inp,fontSize:11}}><option value="all">Toutes classes</option>{classNames.map(c=><option key={c} value={c}>{c}</option>)}</select>
-            <select value={filterCohort} onChange={e=>setFilterCohort(e.target.value)} style={{...inp,fontSize:11}}><option value="all">Toutes annees</option><option value="2025">2025</option><option value="2026">2026</option></select>
-            <button onClick={loadData} style={{padding:"6px 10px",borderRadius:6,border:"1px solid "+C.border,background:C.card,color:C.muted,cursor:"pointer"}}><RotateCcw size={12}/></button>
-          </div>
+          <button onClick={loadData} style={{padding:"6px 10px",borderRadius:6,border:"1px solid "+C.border,background:C.card,color:C.muted,cursor:"pointer"}}><RotateCcw size={12}/></button>
         </div>
 
         {/* KPIs */}
@@ -141,12 +137,29 @@ export default function TeacherDashboard(){
         </div>
 
         {/* Tabs — aligned with U4 */}
-        <div style={{display:"flex",gap:4,marginBottom:12,flexWrap:"wrap",borderBottom:"1px solid "+C.border,paddingBottom:8}}>
+        <div style={{display:"flex",gap:4,marginBottom:0,flexWrap:"wrap",borderBottom:"1px solid "+C.border,paddingBottom:8}}>
           {tabBtn("progression",<BarChart size={13}/>,"Progression",0)}
           {tabBtn("questions",<MessageSquare size={13}/>,"Questions",unreadComments)}
           {tabBtn("manage",<UserPlus size={13}/>,"Gerer les eleves",0)}
           {tabBtn("documents",<FolderOpen size={13}/>,"Mes Documents",0)}
           {tabBtn("tools",<Gamepad2 size={13}/>,"Outils & Jeux",0)}
+        </div>
+
+        {/* Filters — under tabs, like U4 */}
+        <div style={{display:"flex",gap:8,alignItems:"center",padding:"10px 0 12px",flexWrap:"wrap"}}>
+          <span style={{fontSize:11,color:C.muted}}>Classe :</span>
+          <select value={filterClass} onChange={e=>setFilterClass(e.target.value)} style={{...inp,fontSize:12,minWidth:120,fontWeight:600}}>
+            <option value="all">Toutes</option>
+            {classNames.map(c=><option key={c} value={c}>{c}</option>)}
+          </select>
+          <span style={{fontSize:11,color:C.muted,marginLeft:8}}>Cohorte :</span>
+          <select value={filterCohort} onChange={e=>setFilterCohort(e.target.value)} style={{...inp,fontSize:12,minWidth:100,fontWeight:600}}>
+            <option value="all">Toutes</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+          </select>
+          {(filterClass!=='all'||filterCohort!=='all')&&<span style={{fontSize:10,color:C.accent,marginLeft:8,padding:"3px 8px",borderRadius:4,background:C.accent+"15",fontWeight:600}}>{filtered.length+" eleve"+(filtered.length>1?"s":"")}</span>}
+          {(filterClass!=='all'||filterCohort!=='all')&&<button onClick={()=>{setFilterClass('all');setFilterCohort('all');}} style={{fontSize:10,padding:"3px 8px",borderRadius:4,border:"1px solid "+C.border,background:"transparent",color:C.muted,cursor:"pointer",fontFamily:"inherit"}}>Reinitialiser</button>}
         </div>
 
         {/* ======================== TAB: PROGRESSION ======================== */}
@@ -237,12 +250,12 @@ export default function TeacherDashboard(){
 
           {/* Liste des eleves */}
           <div style={{background:C.card,borderRadius:10,padding:14,border:"1px solid "+C.border}}>
-            <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:10}}>{"Tous les eleves ("+allStudents.length+")"}</div>
+            <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:10}}>{"Eleves"+(filterClass!=='all'?" — "+filterClass:"")+" ("+filtered.length+")"}</div>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:11}}>
               <thead><tr style={{borderBottom:"2px solid "+C.border}}>
                 {["NOM","EMAIL","CLASSE","COHORTE","AUTH","ACTIONS"].map(h=><th key={h} style={{padding:"6px 8px",textAlign:"left",color:C.accent,fontWeight:700,fontSize:10}}>{h}</th>)}
               </tr></thead>
-              <tbody>{allStudents.map(s=>(
+              <tbody>{filtered.map(s=>(
                 <tr key={s.id} style={{borderBottom:"1px solid "+C.border+"40"}}>
                   <td style={{padding:"6px 8px",fontWeight:600}}>{s.first_name+" "+s.last_name}</td>
                   <td style={{padding:"6px 8px",color:C.muted}}>{s.email}</td>
