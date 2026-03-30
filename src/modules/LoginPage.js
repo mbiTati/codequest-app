@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../lib/AuthProvider';
+import { supabase } from '../lib/supabase';
 import { Eye, EyeOff } from 'lucide-react';
 
 const C = {
@@ -115,6 +116,25 @@ export default function LoginPage() {
               background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: 4,
             }}>{showPwd ? <EyeOff size={16} /> : <Eye size={16} />}</button>
           </div>
+
+          {mode === 'login' && (
+            <div style={{ textAlign: 'right', marginBottom: 12 }}>
+              <button type="button" onClick={async () => {
+                if (!email.trim()) { setError('Entrez votre email d\'abord'); return; }
+                setError(''); setLoading(true);
+                const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+                  redirectTo: window.location.origin,
+                });
+                setLoading(false);
+                if (error) setError(error.message);
+                else setSuccess('Email de reinitialisation envoye ! Verifiez votre boite.');
+              }} style={{
+                background: 'none', border: 'none', color: C.muted,
+                cursor: 'pointer', fontFamily: 'inherit', fontSize: 11,
+                textDecoration: 'underline',
+              }}>Mot de passe oublie ?</button>
+            </div>
+          )}
 
           {error && (
             <div style={{
