@@ -53,6 +53,8 @@ import GameCodeRunner from './modules/Game_CodeRunner';
 import { Game_StackQueue, Game_EventCatcher, Game_CodeCleaner, Game_AlgoToCode, Game_ScopeAnimation, Game_StylePolice } from './modules/Game_NewGames';
 import GameCodeStudio from './modules/Game_CodeStudio';
 import ExerciseTechShop from './modules/Exercise_TechShop';
+import ExerciseRestoBistro from './modules/Exercise_RestoBistro';
+import ExerciseClinique from './modules/Exercise_Clinique';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -115,6 +117,8 @@ const GAMES = [
   { id: "g-scope", title: "Scope Animation", desc: "Voyez les variables apparaitre et disparaitre", Icon: Code, component: Game_ScopeAnimation, module: "LO2" },
   { id: "g-style", title: "Style Police", desc: "Trouvez les violations de naming conventions", Icon: Shield, component: Game_StylePolice, module: "LO4" },
   { id: "ex-techshop", title: "TechShop Geneve", desc: "Cas entreprise — Creez un systeme Java complet en 6 etapes", Icon: FileText, component: ExerciseTechShop, module: "LO3" },
+  { id: "ex-resto", title: "Resto Bistro ⭐", desc: "Cas debutant — 3 classes pour un bistro lausannois", Icon: FileText, component: ExerciseRestoBistro, module: "LO3" },
+  { id: "ex-clinique", title: "Clinique Leman ⭐⭐⭐", desc: "Cas avance — Heritage, ArrayList, try-catch, fichiers", Icon: FileText, component: ExerciseClinique, module: "LO3" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
