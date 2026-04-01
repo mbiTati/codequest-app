@@ -123,97 +123,161 @@ if (!window.sendPrompt) {
 }
 
 function Portal({ onSelectModule }) {
-  const [expanded, setExpanded] = useState(null);
+  const [portalTab, setPortalTab] = useState("cours"); // cours or activites
   const { C } = useTheme();
+
+  // Check module completion from localStorage
+  function isModuleCompleted(moduleId) {
+    try {
+      const d = JSON.parse(localStorage.getItem("cq-" + moduleId + "-unified"));
+      if (!d) return false;
+      const steps = Object.keys(d.c || {}).length;
+      return steps >= 3; // 3+ quiz answered = completed
+    } catch { return false; }
+  }
+
+  // Progressive unlock: module N is unlocked if module N-1 is completed (or first in phase)
+  function isModuleUnlocked(mod, idx) {
+    if (idx === 0) return true; // First module always unlocked
+    const allMods = MODULES.filter(m => m.ready);
+    const globalIdx = allMods.findIndex(m => m.id === mod.id);
+    if (globalIdx <= 0) return true;
+    return isModuleCompleted(allMods[globalIdx - 1].id);
+  }
+
+  function getModuleProgress(moduleId) {
+    try {
+      const d = JSON.parse(localStorage.getItem("cq-" + moduleId + "-unified"));
+      if (!d) return { steps: 0, cr: 0 };
+      return { steps: Object.keys(d.c || {}).length, cr: d.cr || 0 };
+    } catch { return { steps: 0, cr: 0 }; }
+  }
+
+  const allReadyMods = MODULES.filter(m => m.ready);
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text }}>
       <div style={{ padding: "24px 20px 16px", textAlign: "center", borderBottom: `1px solid ${C.border}` }}>
         <div style={{ fontSize: 11, letterSpacing: 3, color: C.dimmed, marginBottom: 4 }}>BTEC HND UNIT 1 · PROGRAMMING</div>
         <div style={{ fontSize: 28, fontWeight: 800, color: C.accent }}>CODEQUEST</div>
-        <div style={{ fontSize: 14, color: C.muted, marginTop: 4 }}>Le Labo de l'Inventeur — Unit 1 Programming</div>
       </div>
 
-      <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px 16px" }}>
-        {/* How to */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: C.gold, letterSpacing: 1, marginBottom: 10 }}>COMMENT ÇA MARCHE ?</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8 }}>
-            {[
-              { t: "1. Choisissez un module", d: "Cliquez sur un module ci-dessous pour commencer." },
-              { t: "2. Suivez les étapes", d: "Théorie → Quiz → Jeu → Code guidé → Exercice → Correction." },
-              { t: "3. Codez dans Eclipse", d: "Quand indiqué, ouvrez Eclipse et tapez le code (pas de copier-coller !)." },
-              { t: "4. Exercice seul", d: "Faites l'exercice AVANT la correction. Testez avec les cas fournis." },
-              { t: "5. Débloquez le mémo", d: "Terminez tout pour débloquer la fiche récapitulative." },
-              { t: "6. Soumettez", d: "Envoyez votre code à l'enseignant." },
-            ].map((h, i) => (
-              <div key={i} style={{ background: C.card, borderRadius: 10, padding: "10px 12px", border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{h.t}</div>
-                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5 }}>{h.d}</div>
+      {/* 2 TABS: Cours / Activites (like U4) */}
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "12px 16px 0" }}>
+        <div style={{ display: "flex", gap: 0, marginBottom: 16, borderRadius: 8, overflow: "hidden", border: "1px solid " + C.border }}>
+          <button onClick={() => setPortalTab("cours")} style={{
+            flex: 1, padding: "10px", border: "none",
+            background: portalTab === "cours" ? C.primary : "transparent",
+            color: portalTab === "cours" ? C.text : C.muted,
+            cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 700,
+          }}>📚 Cours</button>
+          <button onClick={() => setPortalTab("activites")} style={{
+            flex: 1, padding: "10px", border: "none",
+            background: portalTab === "activites" ? C.gold : "transparent",
+            color: portalTab === "activites" ? C.bg : C.muted,
+            cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 700,
+          }}>🎮 Activites</button>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 16px 20px" }}>
+
+        {/* ==================== TAB: COURS ==================== */}
+        {portalTab === "cours" && <>
+          {/* Prerequis */}
+          <div style={{ background: C.primary + "15", borderRadius: 10, padding: "10px 14px", border: `1px solid ${C.primary}40`, marginBottom: 16 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, marginBottom: 4 }}>PREREQUIS</div>
+            <div style={{ fontSize: 12, color: C.text }}>
+              <strong>JDK 17+</strong> (adoptium.net) · <strong>Eclipse IDE</strong> for Java Developers (eclipse.org)
+            </div>
+          </div>
+
+          {/* Modules by LO with progressive unlock */}
+          {PHASES.map(phase => (
+            <div key={phase.id} style={{ marginBottom: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <div style={{ width: 4, height: 24, borderRadius: 2, background: phase.color }} />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: phase.color }}>{phase.title}</div>
+                  <div style={{ fontSize: 11, color: C.muted }}>{phase.subtitle}</div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Prérequis */}
-        <div style={{ background: C.primary + "15", borderRadius: 10, padding: "10px 14px", border: `1px solid ${C.primary}40`, marginBottom: 20 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.accent, marginBottom: 4 }}>PRÉREQUIS</div>
-          <div style={{ fontSize: 12, color: C.text }}>
-            <strong>JDK 17+</strong> (adoptium.net) · <strong>Eclipse IDE</strong> for Java Developers (eclipse.org)
-          </div>
-        </div>
-
-        {/* Modules by phase */}
-        {PHASES.map(phase => (
-          <div key={phase.id} style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-              <div style={{ width: 4, height: 24, borderRadius: 2, background: phase.color }} />
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: phase.color }}>{phase.title}</div>
-                <div style={{ fontSize: 11, color: C.muted }}>{phase.subtitle}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 14 }}>
+                {MODULES.filter(m => m.phase === phase.id).map((mod, idx) => {
+                  const unlocked = isModuleUnlocked(mod, idx);
+                  const prog = getModuleProgress(mod.id);
+                  const completed = prog.steps >= 5;
+                  return (
+                    <div key={mod.id}
+                      onClick={() => mod.ready && unlocked && onSelectModule(mod.id)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 12,
+                        padding: "12px 14px", borderRadius: 10,
+                        background: C.card, border: `1px solid ${completed ? C.success + "40" : unlocked ? phase.color + "30" : C.border}`,
+                        cursor: mod.ready && unlocked ? "pointer" : "default",
+                        opacity: unlocked ? 1 : 0.4,
+                        transition: "all .2s",
+                        position: "relative",
+                      }}
+                    >
+                      {/* Lock overlay */}
+                      {!unlocked && (
+                        <div style={{ position: "absolute", inset: 0, borderRadius: 10, background: "rgba(10,15,26,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 }}>
+                          <span style={{ fontSize: 16 }}>🔒</span>
+                          <span style={{ fontSize: 10, color: C.muted, marginLeft: 4 }}>Completez le module precedent</span>
+                        </div>
+                      )}
+                      {/* Completed check */}
+                      {completed && <div style={{ width: 20, height: 20, borderRadius: "50%", background: C.success, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>✓</span>
+                      </div>}
+                      {!completed && mod.Icon && <mod.Icon size={18} color={unlocked ? phase.color : C.dimmed} strokeWidth={1.5} />}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: unlocked ? C.text : C.dimmed }}>{mod.title}</div>
+                        <div style={{ fontSize: 11, color: C.muted }}>{mod.desc}</div>
+                        {prog.steps > 0 && unlocked && <div style={{ fontSize: 9, color: C.accent, marginTop: 2 }}>{prog.steps + " etapes · " + prog.cr + " CR"}</div>}
+                      </div>
+                      {unlocked && !completed ? (
+                        <span style={{ padding: "5px 14px", borderRadius: 7, background: phase.color, color: C.bg, fontSize: 11, fontWeight: 700 }}>{prog.steps > 0 ? "Continuer" : "Lancer"}</span>
+                      ) : completed ? (
+                        <span style={{ padding: "5px 10px", borderRadius: 7, background: C.success + "20", color: C.success, fontSize: 10, fontWeight: 600 }}>Termine ✓</span>
+                      ) : null}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 14 }}>
-              {MODULES.filter(m => m.phase === phase.id).map(mod => (
-                <div key={mod.id}
-                  onClick={() => mod.ready && onSelectModule(mod.id)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 12,
-                    padding: "12px 14px", borderRadius: 10,
-                    background: C.card, border: `1px solid ${mod.ready ? phase.color + "30" : C.border}`,
-                    cursor: mod.ready ? "pointer" : "default",
-                    opacity: mod.ready ? 1 : 0.4,
-                    transition: "all .2s",
-                  }}
-                >
-                  {mod.Icon && <mod.Icon size={18} color={mod.ready ? phase.color : C.dimmed} strokeWidth={1.5} />}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: mod.ready ? C.text : C.dimmed }}>{mod.title}</div>
-                    <div style={{ fontSize: 11, color: C.muted }}>{mod.desc}</div>
-                  </div>
-                  {mod.ready ? (
-                    <span style={{
-                      padding: "5px 14px", borderRadius: 7, background: phase.color,
-                      color: C.bg, fontSize: 11, fontWeight: 700,
-                    }}>Lancer</span>
-                  ) : (
-                    <span style={{ fontSize: 10, color: C.dimmed, padding: "4px 10px", borderRadius: 10, background: C.border }}>Bientôt</span>
-                  )}
+          ))}
+        </>}
+
+        {/* ==================== TAB: ACTIVITES ==================== */}
+        {portalTab === "activites" && <>
+          {/* How to */}
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.gold, letterSpacing: 1, marginBottom: 8 }}>COMMENT CA MARCHE ?</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8 }}>
+              {[
+                { t: "1. Choisissez un jeu", d: "Cliquez sur un jeu ci-dessous pour commencer." },
+                { t: "2. Gagnez des credits", d: "Chaque jeu rapporte des credits R&D pour monter de niveau." },
+                { t: "3. Montez de niveau", d: "9 niveaux : Noob Master → Lord Coder !" },
+              ].map((h, i) => (
+                <div key={i} style={{ background: C.card, borderRadius: 10, padding: "10px 12px", border: `1px solid ${C.border}` }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{h.t}</div>
+                  <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5 }}>{h.d}</div>
                 </div>
               ))}
             </div>
           </div>
-        ))}
 
-        {/* ARCADE */}
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <div style={{ width: 4, height: 24, borderRadius: 2, background: C.gold }} />
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: C.gold }}>Arcade — Mini-Jeux</div>
-              <div style={{ fontSize: 11, color: C.muted }}>Apprendre en jouant — accessible à tout moment</div>
+          {/* ARCADE */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+              <div style={{ width: 4, height: 24, borderRadius: 2, background: C.gold }} />
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: C.gold }}>Arcade — Mini-Jeux</div>
+                <div style={{ fontSize: 11, color: C.muted }}>Apprendre en jouant — {GAMES.length} jeux disponibles</div>
+              </div>
             </div>
-          </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8, paddingLeft: 14 }}>
             {GAMES.map(game => (
               <div key={game.id}
@@ -232,6 +296,7 @@ function Portal({ onSelectModule }) {
             ))}
           </div>
         </div>
+        </>}
 
         <div style={{ textAlign: "center", padding: "20px 0", borderTop: `1px solid ${C.border}`, marginTop: 16 }}>
           <div style={{ fontSize: 11, color: C.dimmed }}>CodeQuest — Le Labo de l'Inventeur · BTEC HND Unit 1</div>
