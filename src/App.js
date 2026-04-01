@@ -3,6 +3,7 @@ import { BookOpen, Code, Repeat, Box, Database, GitBranch, Shield, Package, Bug,
 import { ThemeProvider, useTheme, ThemeToggle } from './modules/ThemeProvider';
 import { AuthProvider, useAuth } from './lib/AuthProvider';
 import { initSyncStorage, setupSyncStorage } from './lib/SyncStorage';
+import { supabase } from './lib/supabase';
 import LoginPage from './modules/LoginPage';
 import TeacherDashboard, { TEACHER_EMAILS } from './modules/TeacherDashboard';
 import StudentScorePage from './modules/StudentScorePage';
@@ -51,6 +52,7 @@ import CoursPage from './modules/CoursPage';
 import GameCodeRunner from './modules/Game_CodeRunner';
 import { Game_StackQueue, Game_EventCatcher, Game_CodeCleaner, Game_AlgoToCode, Game_ScopeAnimation, Game_StylePolice } from './modules/Game_NewGames';
 import GameCodeStudio from './modules/Game_CodeStudio';
+import ExerciseTechShop from './modules/Exercise_TechShop';
 import { ResourcesBar, PortalResources } from './modules/ResourcesBar';
 
 const C = {
@@ -112,6 +114,7 @@ const GAMES = [
   { id: "g-algo", title: "Algo → Code", desc: "Traduisez un flowchart en Java", Icon: GitBranch, component: Game_AlgoToCode, module: "LO1" },
   { id: "g-scope", title: "Scope Animation", desc: "Voyez les variables apparaitre et disparaitre", Icon: Code, component: Game_ScopeAnimation, module: "LO2" },
   { id: "g-style", title: "Style Police", desc: "Trouvez les violations de naming conventions", Icon: Shield, component: Game_StylePolice, module: "LO4" },
+  { id: "ex-techshop", title: "TechShop Geneve", desc: "Cas entreprise — Creez un systeme Java complet en 6 etapes", Icon: FileText, component: ExerciseTechShop, module: "LO3" },
 ];
 
 // Setup SyncStorage (localStorage + Supabase sync)
@@ -122,9 +125,27 @@ if (!window.sendPrompt) {
   window.sendPrompt = () => {};
 }
 
-function Portal({ onSelectModule }) {
+function Portal({ onSelectModule, isTeacher }) {
   const [portalTab, setPortalTab] = useState("cours"); // cours or activites
+  const [locks, setLocks] = useState({});
   const { C } = useTheme();
+
+  // Load locks from Supabase
+  useEffect(() => {
+    async function loadLocks() {
+      try {
+        const { data } = await supabase.from('cq_locks').select('*').eq('unit_id', 1);
+        const obj = {};
+        (data || []).forEach(l => { obj[l.section_key] = l.is_locked; });
+        setLocks(obj);
+      } catch (e) { /* locks table might not exist yet */ }
+    }
+    loadLocks();
+  }, []);
+
+  function isLocked(key) {
+    return !isTeacher && locks[key] === true;
+  }
 
   // Check module completion from localStorage
   function isModuleCompleted(moduleId) {
@@ -193,10 +214,19 @@ function Portal({ onSelectModule }) {
           </div>
 
           {/* Modules by LO with progressive unlock */}
-          {PHASES.map(phase => (
-            <div key={phase.id} style={{ marginBottom: 20 }}>
+          {PHASES.map(phase => {
+            const phaseLockKey = phase.lo ? phase.lo.toLowerCase() : null;
+            const phaseLocked = phaseLockKey && isLocked(phaseLockKey);
+            return (
+            <div key={phase.id} style={{ marginBottom: 20, position: "relative" }}>
+              {phaseLocked && (
+                <div style={{ position: "absolute", inset: 0, borderRadius: 12, background: "rgba(10,15,26,0.8)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                  <span style={{ fontSize: 28 }}>🔒</span>
+                  <span style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>Section bloquee par le prof</span>
+                </div>
+              )}
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <div style={{ width: 4, height: 24, borderRadius: 2, background: phase.color }} />
+                <div style={{ width: 4, height: 24, borderRadius: 2, background: phaseLocked ? C.dimmed : phase.color }} />
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: phase.color }}>{phase.title}</div>
                   <div style={{ fontSize: 11, color: C.muted }}>{phase.subtitle}</div>
@@ -247,7 +277,7 @@ function Portal({ onSelectModule }) {
                 })}
               </div>
             </div>
-          ))}
+          );})}
         </>}
 
         {/* ==================== TAB: ACTIVITES ==================== */}
@@ -270,7 +300,13 @@ function Portal({ onSelectModule }) {
           </div>
 
           {/* ARCADE */}
-          <div style={{ marginBottom: 20 }}>
+          <div style={{ marginBottom: 20, position: "relative" }}>
+            {isLocked('arcade') && (
+              <div style={{ position: "absolute", inset: 0, borderRadius: 12, background: "rgba(10,15,26,0.85)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                <span style={{ fontSize: 32 }}>🔒</span>
+                <span style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>Arcade bloquee par le prof</span>
+              </div>
+            )}
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <div style={{ width: 4, height: 24, borderRadius: 2, background: C.gold }} />
               <div>
@@ -554,7 +590,7 @@ function AppInner() {
       </div>
 
       <StudentHome onOpenModule={(id) => setCurrentModule(id)} onOpenCours={() => setShowCours(true)} />
-      <Portal onSelectModule={setCurrentModule} />
+      <Portal onSelectModule={setCurrentModule} isTeacher={isTeacher} />
       <div style={{ textAlign: "center", padding: "10px 0", background: C.bg, borderTop: "1px solid " + C.border, display: "flex", justifyContent: "center", gap: 12 }}>
         <button onClick={() => { setCohort(null); localStorage.removeItem("cq-cohort"); }} style={{
           padding: "4px 12px", borderRadius: 5, border: "1px solid " + C.border,
