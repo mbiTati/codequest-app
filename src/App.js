@@ -10,6 +10,7 @@ import SettingsPage from './modules/SettingsPage';
 import { CommentButton } from './modules/CommentWidget';
 import JavaEditor from './modules/JavaEditor';
 import StudentHome from './modules/StudentHome';
+import { startPresence, updatePresencePage } from './lib/presence';
 import QuizLiveHost from './modules/QuizLiveHost';
 import QuizLivePlayer from './modules/QuizLivePlayer';
 
@@ -295,10 +296,11 @@ function AppInner() {
     if (saved) setCohort(saved);
   }, []);
 
-  // Init Supabase sync when student is loaded
+  // Init Supabase sync + presence when student is loaded
   useEffect(() => {
     if (student?.id) {
       initSyncStorage(student.id);
+      startPresence(student.id);
     }
   }, [student]);
 

@@ -15,7 +15,7 @@ export default function TeacherDashboard(){
   const[filterCohort,setFilterCohort]=useState('all');const[filterClass,setFilterClass]=useState('all');
   const[loading,setLoading]=useState(true);const[tab,setTab]=useState('progression');
   const[expandedStudent,setExpandedStudent]=useState(null);const[replyText,setReplyText]=useState('');
-  // Manage tab
+  const[presence,setPresence]=useState([]);  // Manage tab
   const[newClassName,setNewClassName]=useState('');const[newClassDesc,setNewClassDesc]=useState('');const[newClassCohort,setNewClassCohort]=useState('2025');
   const[newFirst,setNewFirst]=useState('');const[newLast,setNewLast]=useState('');const[newEmail,setNewEmail]=useState('');
   const[newStudClass,setNewStudClass]=useState('');const[newStudCohort,setNewStudCohort]=useState('2025');
@@ -39,9 +39,23 @@ export default function TeacherDashboard(){
     ]);
     setStudents(sR.data||[]);setProgress(pR.data||[]);setModules(mR.data||[]);
     setGameScores(gR.data||[]);setComments(cR.data||[]);setClasses(clR.data||[]);
-    loadFiles();loadLocks();
+    loadFiles();loadLocks();loadPresence();
     setLoading(false);
   }
+
+  async function loadPresence(){
+    try{
+      const{data}=await supabase.from('cq_presence').select('*,cq_students(first_name,last_name,class_name)').order('last_seen',{ascending:false});
+      setPresence(data||[]);
+    }catch(e){setPresence([]);}
+  }
+
+  // Auto-refresh presence every 15s when on "live" tab
+  useEffect(()=>{
+    if(tab!=='live')return;
+    const iv=setInterval(loadPresence,15000);
+    return()=>clearInterval(iv);
+  },[tab]);
 
   async function loadLocks(){
     try{
@@ -157,6 +171,7 @@ export default function TeacherDashboard(){
           {tabBtn("manage",<UserPlus size={13}/>,"Gerer les eleves",0)}
           {tabBtn("documents",<FolderOpen size={13}/>,"Mes Documents",0)}
           {tabBtn("tools",<Gamepad2 size={13}/>,"Outils & Jeux",0)}
+          {tabBtn("live",<span style={{fontSize:13}}>🟢</span>,"En direct",presence.filter(p=>p.is_online&&(Date.now()-new Date(p.last_seen).getTime()<60000)).length)}
           {tabBtn("locks",<span style={{fontSize:13}}>🔒</span>,"Acces",0)}
         </div>
 
@@ -333,6 +348,49 @@ export default function TeacherDashboard(){
               </div>);
             })}
           </div>
+        </div>}
+
+        {/* ======================== TAB: EN DIRECT ======================== */}
+        {tab==="live"&&<div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:12,color:C.muted}}>Presence des eleves — rafraichi toutes les 15s</div>
+            <button onClick={loadPresence} style={{padding:"4px 10px",borderRadius:4,border:"1px solid "+C.border,background:C.card,color:C.muted,cursor:"pointer",fontSize:10}}><RotateCcw size={10}/> Rafraichir</button>
+          </div>
+          {(()=>{
+            const now=Date.now();
+            const online=presence.filter(p=>p.is_online&&(now-new Date(p.last_seen).getTime()<60000));
+            const recent=presence.filter(p=>!online.includes(p)&&(now-new Date(p.last_seen).getTime()<300000));
+            const offline=presence.filter(p=>!online.includes(p)&&!recent.includes(p));
+            return(<>
+              {online.length>0&&<div style={{marginBottom:12}}>
+                <div style={{fontSize:11,fontWeight:700,color:C.success,marginBottom:6}}>{"🟢 En ligne ("+online.length+")"}</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:6}}>
+                  {online.map(p=>(
+                    <div key={p.student_id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",borderRadius:6,background:C.success+"10",border:"1px solid "+C.success+"30"}}>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:C.success,flexShrink:0}}/>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:11,fontWeight:600}}>{p.cq_students?.first_name+" "+p.cq_students?.last_name}</div>
+                        <div style={{fontSize:9,color:C.muted}}>{p.current_page||"app"}{p.cq_students?.class_name&&<span style={{marginLeft:4,color:C.dimmed}}>{p.cq_students.class_name}</span>}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>}
+              {recent.length>0&&<div style={{marginBottom:12}}>
+                <div style={{fontSize:11,fontWeight:700,color:C.gold,marginBottom:6}}>{"🟡 Recent ("+recent.length+")"}</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:6}}>
+                  {recent.map(p=>(
+                    <div key={p.student_id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",borderRadius:6,background:C.card,border:"1px solid "+C.border}}>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:C.gold,flexShrink:0}}/>
+                      <div><div style={{fontSize:11,fontWeight:600}}>{p.cq_students?.first_name+" "+p.cq_students?.last_name}</div>
+                      <div style={{fontSize:9,color:C.dimmed}}>{"Il y a "+Math.round((now-new Date(p.last_seen).getTime())/60000)+" min"}</div></div>
+                    </div>
+                  ))}
+                </div>
+              </div>}
+              {online.length===0&&recent.length===0&&<div style={{textAlign:"center",padding:30,color:C.dimmed}}>Aucun eleve connecte</div>}
+            </>);
+          })()}
         </div>}
 
         {/* ======================== TAB: ACCES (LOCKS) ======================== */}

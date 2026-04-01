@@ -1,5 +1,6 @@
 import { useAuth } from '../lib/AuthProvider';
 import { Zap, Star, TrendingUp, Play, FolderOpen } from 'lucide-react';
+import LevelCharacter from './LevelCharacter';
 
 const C = {
   bg:"#0a0f1a",card:"#111827",accent:"#32E0C4",gold:"#F59E0B",
@@ -56,8 +57,14 @@ export default function StudentHome({ onOpenModule, onOpenCours }) {
 
       {/* Welcome card — compact */}
       <div className="hc" style={{ background:`linear-gradient(135deg,${C.card},${level.color}12)`, borderRadius:14, padding:"14px 18px", border:"1px solid "+level.color+"25", marginBottom:12, display:"flex", alignItems:"center", gap:16 }}>
-        <div className="lr" style={{ width:56,height:56,borderRadius:"50%",flexShrink:0, background:level.color+"18",border:"2px solid "+level.color, display:"flex",alignItems:"center",justifyContent:"center" }}>
-          <div style={{ fontSize:15,fontWeight:800,color:level.color }}>{isTeacher?"PROF":("Nv"+(lvlIdx+1))}</div>
+        <div className="lr" style={{ width:60,height:60,flexShrink:0, display:"flex",alignItems:"center",justifyContent:"center" }}>
+          {isTeacher ? (
+            <div style={{ width:56,height:56,borderRadius:"50%",background:level.color+"18",border:"2px solid "+level.color,display:"flex",alignItems:"center",justifyContent:"center" }}>
+              <div style={{ fontSize:15,fontWeight:800,color:level.color }}>PROF</div>
+            </div>
+          ) : (
+            <LevelCharacter level={lvlIdx} size={56} />
+          )}
         </div>
         <div style={{ flex:1,minWidth:0 }}>
           <div style={{ fontSize:15,fontWeight:700,color:C.text }}>{"Bonjour "+(student?.first_name||"Codeur")+" !"}</div>
