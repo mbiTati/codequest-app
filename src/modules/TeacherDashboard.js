@@ -22,6 +22,8 @@ export default function TeacherDashboard(){
   const[manageMsg,setManageMsg]=useState(null);
   // Documents tab
   const[uploadedFiles,setUploadedFiles]=useState([]);const[uploading,setUploading]=useState(false);
+  // Locks tab
+  const[locks,setLocks]=useState({});
 
   useEffect(()=>{loadData();},[]);
 
@@ -37,8 +39,20 @@ export default function TeacherDashboard(){
     ]);
     setStudents(sR.data||[]);setProgress(pR.data||[]);setModules(mR.data||[]);
     setGameScores(gR.data||[]);setComments(cR.data||[]);setClasses(clR.data||[]);
-    loadFiles();
+    loadFiles();loadLocks();
     setLoading(false);
+  }
+
+  async function loadLocks(){
+    try{
+      const{data}=await supabase.from('cq_locks').select('*').eq('unit_id',1);
+      const obj={};(data||[]).forEach(l=>{obj[l.section_key]=l.is_locked;});setLocks(obj);
+    }catch(e){setLocks({});}
+  }
+  async function toggleLock(key){
+    const newVal=!locks[key];
+    await supabase.from('cq_locks').upsert({unit_id:1,section_key:key,is_locked:newVal},{onConflict:'unit_id,section_key'});
+    setLocks(l=>({...l,[key]:newVal}));
   }
 
   async function loadFiles(){
@@ -143,6 +157,7 @@ export default function TeacherDashboard(){
           {tabBtn("manage",<UserPlus size={13}/>,"Gerer les eleves",0)}
           {tabBtn("documents",<FolderOpen size={13}/>,"Mes Documents",0)}
           {tabBtn("tools",<Gamepad2 size={13}/>,"Outils & Jeux",0)}
+          {tabBtn("locks",<span style={{fontSize:13}}>🔒</span>,"Acces",0)}
         </div>
 
         {/* Filters — under tabs, like U4 */}
@@ -317,6 +332,31 @@ export default function TeacherDashboard(){
                 <div style={{fontSize:9,color:C.muted}}>{gs.length+" parties"}</div>
               </div>);
             })}
+          </div>
+        </div>}
+
+        {/* ======================== TAB: ACCES (LOCKS) ======================== */}
+        {tab==="locks"&&<div>
+          <div style={{fontSize:12,color:C.muted,marginBottom:12}}>Bloquer/debloquer des sections pour les eleves. Le prof voit toujours tout.</div>
+          <div style={{display:"grid",gap:6}}>
+            {[
+              {key:"arcade",label:"Arcade — Mini-Jeux",desc:"Tous les jeux pedagogiques"},
+              {key:"quiz_live",label:"Quiz Live Kahoot",desc:"Sessions de quiz en temps reel"},
+              {key:"documents_corriges",label:"Documents corriges",desc:"Fiches de correction et memos"},
+              {key:"classement",label:"Classement",desc:"Page scores / leaderboard"},
+              {key:"lo3",label:"LO3 — Implementation",desc:"Modules M06, M07, M12, M13"},
+              {key:"lo4",label:"LO4 — Debugging & Standards",desc:"Modules M09, M10, M11"},
+              {key:"cours_page",label:"Page Cours & Documents",desc:"Acces aux cours et memos"},
+              {key:"onecompiler",label:"OneCompiler Java",desc:"Editeur Java integre"},
+            ].map(s=>(
+              <div key={s.key} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:8,background:C.card,border:"1px solid "+(locks[s.key]?C.danger+"40":C.success+"40")}}>
+                <div>
+                  <div style={{fontSize:12,fontWeight:600,color:locks[s.key]?C.danger:C.text}}>{(locks[s.key]?"🔒 ":"🔓 ")+s.label}</div>
+                  <div style={{fontSize:9,color:C.muted}}>{s.desc}</div>
+                </div>
+                <button onClick={()=>toggleLock(s.key)} style={{padding:"6px 14px",borderRadius:6,border:"none",background:locks[s.key]?C.success:C.danger,color:"#fff",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:700}}>{locks[s.key]?"Debloquer":"Bloquer"}</button>
+              </div>
+            ))}
           </div>
         </div>}
       </div>

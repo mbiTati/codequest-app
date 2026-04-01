@@ -69,41 +69,15 @@ export default function LoginPage() {
         borderRadius: 16, padding: 28, border: '1px solid ' + C.border,
       }}>
         <div style={{ display: 'flex', marginBottom: 20, borderRadius: 8, overflow: 'hidden', border: '1px solid ' + C.border }}>
-          <button onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
-            style={{
-              flex: 1, padding: '8px', border: 'none',
-              background: mode === 'login' ? C.primary : 'transparent',
-              color: mode === 'login' ? C.text : C.muted,
-              cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, fontWeight: 600,
-            }}>Connexion</button>
-          <button onClick={() => { setMode('signup'); setError(''); setSuccess(''); }}
-            style={{
-              flex: 1, padding: '8px', border: 'none',
-              background: mode === 'signup' ? C.primary : 'transparent',
-              color: mode === 'signup' ? C.text : C.muted,
-              cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, fontWeight: 600,
-            }}>Inscription</button>
+          <div style={{
+              flex: 1, padding: '8px', textAlign: 'center',
+              background: C.primary,
+              color: C.text,
+              fontFamily: 'inherit', fontSize: 12, fontWeight: 600,
+            }}>Connexion</div>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {mode === 'signup' && (
-            <>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-                <input type="text" placeholder="Prenom" value={firstName}
-                  onChange={e => setFirstName(e.target.value)} style={inputStyle} />
-                <input type="text" placeholder="Nom" value={lastName}
-                  onChange={e => setLastName(e.target.value)} style={inputStyle} />
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <select value={cohort} onChange={e => setCohort(e.target.value)}
-                  style={{ ...inputStyle, cursor: 'pointer' }}>
-                  <option value="2025">Cohorte 2025-2026</option>
-                  <option value="2026">Cohorte 2026-2027</option>
-                </select>
-              </div>
-            </>
-          )}
-
           <div style={{ marginBottom: 12 }}>
             <input type="email" placeholder="Email" value={email}
               onChange={e => setEmail(e.target.value)} required style={inputStyle} />
@@ -158,7 +132,7 @@ export default function LoginPage() {
             cursor: loading ? 'default' : 'pointer',
             fontFamily: 'inherit', fontSize: 14, fontWeight: 700,
           }}>
-            {loading ? '...' : mode === 'login' ? 'Se connecter' : "S'inscrire"}
+            {loading ? '...' : 'Se connecter'}
           </button>
         </form>
       </div>
