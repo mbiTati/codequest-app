@@ -406,6 +406,7 @@ export default function TeacherDashboard(){
               {key:"lo4",label:"LO4 — Debugging & Standards",desc:"Modules M09, M10, M11"},
               {key:"cours_page",label:"Page Cours & Documents",desc:"Acces aux cours et memos"},
               {key:"onecompiler",label:"OneCompiler Java",desc:"Editeur Java integre"},
+              {key:"progressive_off",label:"Deblocage progressif",desc:"Si BLOQUE : tous les modules sont ouverts. Si DEBLOQUE : l'eleve doit completer le module precedent."},
             ].map(s=>(
               <div key={s.key} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:8,background:C.card,border:"1px solid "+(locks[s.key]?C.danger+"40":C.success+"40")}}>
                 <div>

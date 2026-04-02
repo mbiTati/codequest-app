@@ -162,7 +162,10 @@ function Portal({ onSelectModule, isTeacher }) {
   }
 
   // Progressive unlock: module N is unlocked if module N-1 is completed (or first in phase)
+  // Teacher always sees everything unlocked
   function isModuleUnlocked(mod, idx) {
+    if (isTeacher) return true; // Prof voit tout
+    if (locks['progressive_off']) return true; // Prof a desactive le deblocage progressif
     if (idx === 0) return true; // First module always unlocked
     const allMods = MODULES.filter(m => m.ready);
     const globalIdx = allMods.findIndex(m => m.id === mod.id);
