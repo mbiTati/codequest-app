@@ -108,7 +108,8 @@ export default function CoursPage({ onOpenExercise }) {
         {/* GRID like U4 DataQuest */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, alignItems: "start" }}>
 
-          {/* COL 1: Presentations PPTX */}
+          {/* COL 1: Presentations PPTX (PROF ONLY) */}
+          {isTeacher && (
           <Section title="Presentations" tag="PPTX" tagColor={C.primary}>
             {PPTX_COURS.map((c, i) => (
               <a key={i} href={c.file} download style={{ display: "block", padding: "6px 10px", borderRadius: 6, textDecoration: "none", marginBottom: 3, background: C.card, border: "1px solid " + C.border }}>
@@ -116,11 +117,12 @@ export default function CoursPage({ onOpenExercise }) {
               </a>
             ))}
           </Section>
+          )}
 
-          {/* COL 2: Exercices */}
+          {/* COL 2: Exercices (visible par tous) */}
           <Section title="Exercices eleves" tag="EXOS" tagColor={C.gold}>
             {EXERCICES.map((ex, i) => <DocLink key={i} label={ex.label} href={ex.file} color={C.gold} />)}
-            {EXAMEN.map((ex, i) => <DocLink key={i} label={ex.label} href={ex.file} color={C.danger} desc="Examen 3h" />)}
+            {isTeacher && EXAMEN.map((ex, i) => <DocLink key={"ex"+i} label={ex.label} href={ex.file} color={C.danger} desc="Examen 3h — prof uniquement" />)}
           </Section>
 
           {/* COL 3: Memos */}
@@ -158,8 +160,8 @@ export default function CoursPage({ onOpenExercise }) {
           )}
         </div>
 
-        {/* Java files section */}
-        <div style={{ marginTop: 16 }}>
+        {/* Java files section (PROF ONLY) */}
+        {isTeacher && <div style={{ marginTop: 16 }}>
           <Section title="Fichiers Java Eclipse" tag="JAVA" tagColor="#F97316">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 4 }}>
               {JAVA_FILES.map((j, i) => (
@@ -170,7 +172,7 @@ export default function CoursPage({ onOpenExercise }) {
               ))}
             </div>
           </Section>
-        </div>
+        </div>}
 
         {/* OneCompiler link */}
         <div style={{ marginTop: 8, background: C.card, borderRadius: 8, padding: 10, border: "1px solid " + C.primary + "30", display: "flex", alignItems: "center", gap: 10 }}>
